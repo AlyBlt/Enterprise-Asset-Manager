@@ -1,15 +1,22 @@
+using AssetManager.API.Middlewares;
+using AssetManager.Application;
 using AssetManager.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using AssetManager.Application;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
-var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]!);
 
+var keyString = jwtSettings["Key"];
+if (string.IsNullOrEmpty(keyString))
+    throw new Exception("JWT Key not found in configuration");
+
+var key = Encoding.ASCII.GetBytes(keyString);
+
+// Authentication
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -29,37 +36,41 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// --- Servis Kayýtlarý ---
+// Dependency Injection
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
-builder.Services.AddControllers();
 
-// Swagger için gerekli olanlar:
+builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
+
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    // Hata veren kýsýmlarý 'Microsoft.OpenApi.Models.' ile zorladýk
-    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Asset Manager API", Version = "v1" });
-
-    // Güvenlik Tanýmý
-    c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Description = "Lütfen baþýna 'Bearer ' yazarak tokený yapýþtýrýn. Örn: Bearer abc123...",
-        Name = "Authorization",
-        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
+        Title = "Asset Manager API",
+        Version = "v1"
     });
 
-    // Güvenlik Gereksinimi
-    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "Bearer token giriniz",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
-            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            new OpenApiSecurityScheme
             {
-                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                Reference = new OpenApiReference
                 {
-                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Type = ReferenceType.SecurityScheme,
                     Id = "Bearer"
                 }
             },
@@ -70,19 +81,18 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// --- HTTP Pipeline ---
+// Middleware
+app.UseMiddleware<GlobalExceptionMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
-    // Swagger arayüzünü aktif et
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Asset Manager API v1");
-        c.RoutePrefix = "swagger"; // Tarayýcýda http://localhost:PORT/swagger adresinde açýlýr
-    });
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
+
+app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -90,4 +100,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-

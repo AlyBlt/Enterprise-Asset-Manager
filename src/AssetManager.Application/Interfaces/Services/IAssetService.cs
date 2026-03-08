@@ -9,4 +9,6 @@ public interface IAssetService
     Task<AssetResponseDto?> GetAssetByIdAsync(int id);
     Task<bool> CreateAssetAsync(CreateAssetRequestDto request);
     Task<bool> DeleteAssetAsync(int id);
+    Task<bool> AssignAssetToUserAsync(int assetId, int userId);
+    Task<bool> UnassignAssetAsync(int assetId);
 }

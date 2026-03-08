@@ -3,47 +3,88 @@ using AssetManager.Application.Interfaces.Repositories;
 using AssetManager.Application.Interfaces.Services;
 using AssetManager.Core.Entities;
 using AssetManager.Core.Enums;
+using AutoMapper;
+using FluentValidation; // Validator için eklendi
 
 namespace AssetManager.Application.Services;
 
 public class AuthService(
-    IGenericRepository<AppUserEntity> userRepository,
-    ITokenService tokenService) : IAuthService
+    IUserRepository userRepository,
+    ITokenService tokenService,
+    IPasswordHasher passwordHasher,
+    IMapper mapper,
+    IAuditLogService auditLogService,
+    IValidator<RegisterRequestDto> registerValidator, // Enjekte edildi
+    IValidator<LoginRequestDto> loginValidator) : IAuthService // Enjekte edildi
 {
     public async Task<AuthResponseDto> RegisterAsync(RegisterRequestDto request)
     {
-        // 1. Kullanıcı var mı kontrol et
-        var existingUser = await userRepository.FindAsync(u => u.Username == request.Username || u.Email == request.Email);
-        if (existingUser.Any())
-            return new AuthResponseDto { IsSuccess = false, Message = "Kullanıcı adı veya e-posta zaten kullanımda!" };
-
-        // 2. Yeni kullanıcıyı oluştur
-        var newUser = new AppUserEntity
+        // 1. VALIDASYON KONTROLÜ
+        var validationResult = await registerValidator.ValidateAsync(request);
+        if (!validationResult.IsValid)
         {
-            Username = request.Username,
-            FullName = request.FullName,
-            Email = request.Email,
-            PasswordHash = request.Password, // İleride BCrypt ile hashleyeceğiz
-            Role = Roles.Guest, // Yeni kayıt olanlar varsayılan olarak Guest
-            DepartmentId = request.DepartmentId
-        };
+            // Middleware bu hatayı yakalayıp 400 Bad Request dönecek
+            throw new FluentValidation.ValidationException(validationResult.Errors);
+        }
+
+        var users = await userRepository.FindAsync(u => u.Username == request.Username || u.Email == request.Email);
+
+        if (users.Any())
+        {
+            return new AuthResponseDto { IsSuccess = false, Message = "This username or email is already used." };
+        }
+
+        var newUser = mapper.Map<AppUserEntity>(request);
+        newUser.PasswordHash = passwordHasher.HashPassword(request.Password);
+        newUser.Role = Roles.Guest;
 
         await userRepository.AddAsync(newUser);
-        await userRepository.SaveChangesAsync();
+        var result = await userRepository.SaveChangesAsync() > 0;
 
-        return new AuthResponseDto { IsSuccess = true, Message = "Kayıt başarıyla tamamlandı." };
+        if (result)
+        {
+            await auditLogService.LogAsync(
+                "Register",
+                "AppUser",
+                newUser.Username,
+                $"New user registered: {newUser.Username}"
+            );
+        }
+
+        return new AuthResponseDto { IsSuccess = true, Message = "Successfully registered." };
     }
 
     public async Task<AuthResponseDto> LoginAsync(LoginRequestDto request)
     {
-        var users = await userRepository.FindAsync(u => u.Username == request.Username);
-        var user = users.FirstOrDefault();
+        // 1. VALIDASYON KONTROLÜ
+        var validationResult = await loginValidator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+        {
+            throw new FluentValidation.ValidationException(validationResult.Errors);
+        }
 
-        if (user == null || user.PasswordHash != request.Password)
-            return new AuthResponseDto { IsSuccess = false, Message = "Hatalı giriş bilgileri!" };
+        var user = await userRepository.GetByUsernameWithDetailsAsync(request.Username);
 
-        // Ayrıştırdığımız TokenService'i çağırıyoruz
+        if (user == null || !passwordHasher.VerifyPassword(request.Password, user.PasswordHash))
+        {
+            await auditLogService.LogAsync(
+                "Login-Failed",
+                "AppUser",
+                request.Username,
+                "Invalid login attempt!"
+            );
+
+            return new AuthResponseDto { IsSuccess = false, Message = "Wrong username or password!" };
+        }
+
         var token = tokenService.GenerateJwtToken(user);
+
+        await auditLogService.LogAsync(
+            "Login-Success",
+            "AppUser",
+            user.Id.ToString(),
+            $"User signed in: {user.Username}"
+        );
 
         return new AuthResponseDto
         {

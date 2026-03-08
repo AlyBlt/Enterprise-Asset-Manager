@@ -10,6 +10,7 @@ namespace AssetManager.Core.Enums
         InRepair = 2,    // Tamirde
         Retired = 3,     // Hurdaya ayrıldı/Emekli
         Lost = 4,        // Kayıp
-        InStock = 5      // Stokta (Henüz atanmamış)
+        InStock = 5,      // Stokta (Henüz atanmamış)
+        Assigned = 6
     }
 }

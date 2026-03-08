@@ -1,6 +1,9 @@
 ﻿using AssetManager.Application.Interfaces.Repositories;
+using AssetManager.Application.Interfaces.Services;
+using AssetManager.Application.Services;
 using AssetManager.Infrastructure.Data;
 using AssetManager.Infrastructure.Repositories;
+using AssetManager.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +24,12 @@ namespace AssetManager.Infrastructure
             services.AddHostedService<DatabaseInitializerService>();
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<IAssetRepository, AssetRepository>();
             services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            services.AddScoped<IPasswordHasher, PasswordHasher>();
+            services.AddScoped<ITokenService, TokenService>();
 
 
             return services;

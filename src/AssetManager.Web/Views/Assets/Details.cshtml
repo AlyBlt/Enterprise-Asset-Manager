@@ -11,8 +11,8 @@
             <h2 class="fw-bold text-dark mb-0">@Model.Name</h2>
             <span class="badge bg-light text-secondary border px-3 mt-2">Serial: @Model.SerialNumber</span>
         </div>
-        <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">
-            <i class="bi bi-arrow-left me-2"></i>Back to List
+        <a asp-action="Index" class="btn btn-white btn-lg rounded-circle shadow-sm me-3">
+            <i class="bi bi-arrow-left text-success"></i>Back
         </a>
     </div>
 
@@ -47,7 +47,7 @@
 
                     <div class="mb-3">
                         <label class="text-muted small d-block">Purchase Price</label>
-                        <span class="fw-bold text-success fs-5">$ @Model.Price.ToString("0", System.Globalization.CultureInfo.GetCultureInfo("en-US"))</span>
+                        <span class="fw-bold text-success fs-5">$ @Model.Price.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("en-US"))</span>
                     </div>
 
                     <hr class="text-muted opacity-25" />

@@ -13,7 +13,7 @@
         :root {
             --primary-forest: #064e3b;
             --accent-emerald: #10b981;
-            --hover-green: #34d399; /* Biraz daha açık bir yeşil (hover için) */
+            --hover-green: #34d399; 
             --bg-light: #f0fdf4;
         }
 
@@ -35,12 +35,6 @@
             margin: 0 5px;
             position: relative;
         }
-
-            /* HOVER DURUMU - Yazı kaybolmasın diye bembeyaz yapıyoruz */
-            .nav-link:hover, .nav-link:focus {
-                color: #ffffff !important;
-                transform: translateY(-1px);
-            }
 
             /* Hover sırasında altına ince bir yeşil çizgi ekle */
             .nav-link::after {
@@ -70,7 +64,7 @@
 
             .admin-link:hover {
                 color: #f59e0b !important;
-                text-shadow: 0 0 8px rgba(251, 191, 36, 0.4);
+                text-shadow: 0 0 8px rgba(251, 191, 36, 0.4) !important;
             }
 
         .main-container {
@@ -83,13 +77,16 @@
             border-top: 1px solid #d1fae5;
         }
 
-        /* Kullanıcı butonu hover fix */
-        .navbar-nav .dropdown-toggle.btn-outline-light:hover {
+        /* Kullanıcı butonu hover fix - Arka plan beyaz olduğunda yazı koyu yeşil olur */
+        .navbar-nav .dropdown-toggle.btn-outline-light:hover,
+        .navbar-nav .dropdown-toggle.btn-outline-light:focus,
+        .navbar-nav .nav-item.dropdown.show > .btn-outline-light {
             background-color: #ffffff !important;
-            color: var(--primary-forest) !important; /* Arka plan beyaz olunca yazı koyu yeşil olsun */
+            color: var(--primary-forest) !important; /* Yazıyı koyu yeşil yap ki beyaz üzerinde görünsün */
             border-color: #ffffff !important;
         }
 
+           
         /* Dropdown içindeki logout yazısının hover hali */
         .dropdown-item.text-danger:hover {
             background-color: #fee2e2 !important; /* Hafif kırmızı arka plan */
@@ -100,6 +97,7 @@
         .btn-outline-light.nav-link::after {
             display: none !important;
         }
+       
     </style>
 </head>
 <body>

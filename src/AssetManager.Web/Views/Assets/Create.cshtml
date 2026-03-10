@@ -1,0 +1,89 @@
+﻿@model AssetManager.Web.Models.Asset.AssetCreateViewModel
+
+@{
+    ViewData["Title"] = "Add New Corporate Asset";
+}
+
+<div class="container animate__animated animate__fadeIn">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="d-flex align-items-center mb-4">
+                <a asp-action="Index" class="btn btn-light rounded-circle me-3 shadow-sm">
+                    <i class="bi bi-arrow-left text-dark"></i>
+                </a>
+                <div>
+                    <h2 class="fw-bold text-dark mb-0">Add New Asset</h2>
+                    <p class="text-muted small mb-0">Enter the technical details to register a new device to the inventory.</p>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="card-header bg-success bg-opacity-10 py-3 border-0">
+                    <h6 class="mb-0 text-success fw-bold"><i class="bi bi-pencil-square me-2"></i>Asset Information</h6>
+                </div>
+                <div class="card-body p-4 p-md-5">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3 small"></div>
+
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <label asp-for="Name" class="form-label fw-semibold small">Asset Name / Model</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-laptop"></i></span>
+                                    <input asp-for="Name" class="form-control border-start-0 ps-0" placeholder="e.g. MacBook Pro M3 14'" />
+                                </div>
+                                <span asp-validation-for="Name" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="SerialNumber" class="form-label fw-semibold small">Serial Number</label>
+                                <input asp-for="SerialNumber" class="form-control" placeholder="ABC-123456789" />
+                                <span asp-validation-for="SerialNumber" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Category" class="form-label fw-semibold small">Category</label>
+                                <select asp-for="Category" class="form-select">
+                                    <option value="">Select Category...</option>
+                                    <option value="Laptop">Laptop</option>
+                                    <option value="Desktop">Desktop</option>
+                                    <option value="Monitor">Monitor</option>
+                                    <option value="Mobile">Mobile Phone</option>
+                                    <option value="Peripheral">Peripheral (Mouse, Keyboard, etc.)</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <span asp-validation-for="Category" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Price" class="form-label fw-semibold small">Purchase Price ($)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input asp-for="Price" class="form-control" type="number" step="0.01" />
+                                </div>
+                                <span asp-validation-for="Price" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-12">
+                                <label asp-for="Description" class="form-label fw-semibold small">Notes / Description</label>
+                                <textarea asp-for="Description" class="form-control" rows="3" placeholder="Additional details, warranty info, etc..."></textarea>
+                                <span asp-validation-for="Description" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="mt-5 d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-action="Index" class="btn btn-light px-5 rounded-pill fw-semibold">Cancel</a>
+                            <button type="submit" class="btn btn-success px-5 rounded-pill fw-bold shadow">
+                                <i class="bi bi-cloud-arrow-up-fill me-2"></i>Save Asset
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

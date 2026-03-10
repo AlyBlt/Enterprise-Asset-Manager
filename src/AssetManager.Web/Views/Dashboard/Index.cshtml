@@ -1,0 +1,193 @@
+﻿@using System.Globalization
+@model AssetManager.Web.Models.Dashboard.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<style>
+    /* İstatistik Kartları İçin Özel Efektler */
+    .stat-card {
+        border: none;
+        border-radius: 12px;
+        transition: transform 0.2s;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .icon-box {
+        width: 50px;
+        height: 50px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+
+    /* Timeline (Son Hareketler) Tasarımı */
+    .activity-feed {
+        padding: 0;
+        list-style: none;
+    }
+
+    .activity-item {
+        position: relative;
+        padding-left: 25px;
+        padding-bottom: 20px;
+        border-left: 2px solid #e9ecef;
+    }
+
+        .activity-item::before {
+            content: "";
+            position: absolute;
+            left: -7px;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--accent-emerald);
+            border: 2px solid #fff;
+        }
+
+        .activity-item:last-child {
+            border-left-color: transparent;
+        }
+</style>
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-dark">System Overview</h2>
+            <p class="text-muted">Real-time status of your assets and recent logs.</p>
+        </div>
+        <div class="text-end">
+            <span class="badge bg-light text-dark p-2 border">
+                <i class="bi bi-calendar3 me-2"></i>@DateTime.Now.ToString("dd MMMM yyyy", new CultureInfo("en-US"))
+            </span>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card stat-card shadow-sm text-white" style="background-color: var(--primary-forest);">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="small text-white-50 mb-1">Total Assets</p>
+                            <h3 class="fw-bold mb-0">@Model.TotalAssets</h3>
+                        </div>
+                        <div class="icon-box"><i class="bi bi-boxes"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card shadow-sm text-white" style="background-color: var(--accent-emerald);">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="small text-white-50 mb-1">In Stock</p>
+                            <h3 class="fw-bold mb-0">@Model.InStockAssets</h3>
+                        </div>
+                        <div class="icon-box"><i class="bi bi-check-circle"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card shadow-sm text-white" style="background-color: #3b82f6;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="small text-white-50 mb-1">Assigned</p>
+                            <h3 class="fw-bold mb-0">@Model.AssignedAssets</h3>
+                        </div>
+                        <div class="icon-box"><i class="bi bi-person-badge"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card shadow-sm text-white" style="background-color: #f59e0b;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="small text-white-50 mb-1">In Repair</p>
+                            <h3 class="fw-bold mb-0">@Model.InRepairAsset</h3>
+                        </div>
+                        <div class="icon-box"><i class="bi bi-tools"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white py-3 border-0">
+                    <h5 class="fw-bold mb-0 text-dark">Status Breakdown</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3">
+                            <span><i class="bi bi-lightning-fill text-success me-2"></i>Active Assets</span>
+                            <span class="badge bg-light text-dark rounded-pill">@Model.ActiveAsset</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3">
+                            <span><i class="bi bi-trash text-secondary me-2"></i>Retired / Scrapped</span>
+                            <span class="badge bg-light text-dark rounded-pill">@Model.RetiredAsset</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-3 border-0">
+                            <span><i class="bi bi-question-circle text-danger me-2"></i>Lost Assets</span>
+                            <span class="badge bg-danger rounded-pill">@Model.LostAssets</span>
+                        </li>
+                    </ul>
+
+                    <div class="mt-4 p-3 bg-light rounded-3 text-center">
+                        <p class="small text-muted mb-0">You are currently managing <strong>@Model.TotalAssets</strong> assets across all departments.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white py-3 border-0">
+                    <h5 class="fw-bold mb-0 text-dark">Recent Activities</h5>
+                </div>
+                <div class="card-body">
+                    <div class="activity-feed">
+                        @if (Model.RecentActivities != null && Model.RecentActivities.Any())
+                        {
+                            @foreach (var activity in Model.RecentActivities)
+                            {
+                                <div class="activity-item">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span class="fw-bold text-dark">@activity.ActionType</span>
+                                        <span class="text-muted" style="font-size: 0.75rem;">@activity.Date</span>
+                                    </div>
+                                    <p class="text-muted small mb-0">@activity.Description</p>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="text-center py-5 text-muted">
+                                <i class="bi bi-clock-history display-4 opacity-25"></i>
+                                <p class="mt-2">No recent actions recorded.</p>
+                            </div>
+                        }
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="/AuditLogs" class="btn btn-sm btn-outline-success rounded-pill px-4">View All Logs</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

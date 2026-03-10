@@ -1,0 +1,131 @@
+﻿@model AssetManager.Web.Models.Auth.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<style>
+    body {
+        /* Arka plana çok hafif bir yeşil degrade ekleyelim */
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    }
+
+    .login-card {
+        border: none;
+        border-radius: 1rem;
+        transition: transform 0.3s ease;
+    }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .btn-green {
+        background-color: #10b981; /* Emerald Green */
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: 0.75rem;
+    }
+
+        .btn-green:hover {
+            background-color: #059669;
+            color: white;
+        }
+
+    .form-control:focus {
+        border-color: #10b981;
+        box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25);
+    }
+
+    .login-icon {
+        background-color: #ecfdf5;
+        color: #10b981;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 1.5rem;
+    }
+</style>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger border-0 shadow-sm d-flex align-items-start mb-4 animate__animated animate__shakeX" role="alert">
+        <i class="bi bi-shield-exclamation fs-4 me-3 mt-1"></i>
+        <div>
+            <h6 class="alert-heading mb-1 fw-bold">Whoops! Something went wrong</h6>
+            <div asp-validation-summary="ModelOnly" class="small text-danger"></div>
+        </div>
+        <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="col-md-5 col-lg-4">
+        <div class="card shadow-lg login-card">
+            <div class="card-body p-5">
+                <div class="text-center">
+                    <div class="login-icon shadow-sm">
+                        <i class="bi bi-shield-lock-fill"></i>
+                    </div>
+                    <h3 class="fw-bold text-dark">Welcome Back</h3>
+                    <p class="text-muted small">Please enter your details to login</p>
+                </div>
+
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                <form asp-action="Login" method="post" class="mt-4">
+                    <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Username" class="form-label fw-semibold text-secondary small">Username</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-person"></i></span>
+                            <input asp-for="Username" class="form-control bg-light border-start-0 ps-0" placeholder="admin" />
+                        </div>
+                        <span asp-validation-for="Username" class="text-danger extra-small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label fw-semibold text-secondary small">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-key"></i></span>
+                            <input asp-for="Password" type="password" class="form-control bg-light border-start-0 ps-0" placeholder="••••••••" />
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger extra-small"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-4">
+                        <div class="form-check">
+                            <input asp-for="RememberMe" class="form-check-input" />
+                            <label asp-for="RememberMe" class="form-check-label small text-muted">Remember me</label>
+                        </div>
+                        @* <a href="#" class="small text-decoration-none text-success fw-semibold">Forgot password?</a> *@
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-green rounded-pill shadow-sm">
+                            Login <i class="bi bi-arrow-right ms-2"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer bg-white border-0 text-center pb-4">
+                <p class="text-muted small mb-0">
+                    Don't have an account?
+                    <a asp-action="Register" class="text-success fw-bold text-decoration-none">Sign Up Free</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

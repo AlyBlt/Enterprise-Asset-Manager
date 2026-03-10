@@ -12,6 +12,7 @@ namespace AssetManager.Application.DTOs.Asset
         public decimal Price { get; set; }
         public string Category { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
-        public string? AssignedUserName { get; set; } 
+        public string? AssignedUserName { get; set; }
+        public string SerialNumber { get; set; } = string.Empty;
     }
 }

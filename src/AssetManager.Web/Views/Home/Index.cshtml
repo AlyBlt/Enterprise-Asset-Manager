@@ -1,8 +1,148 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model AssetManager.Web.Models.Home.SystemInfoViewModel
+
+@{
+    ViewData["Title"] = "Welcome to AssetManager";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    /* Hero Section Stili */
+    .hero-container {
+        padding: 5rem 0;
+        background-color: var(--bg-light);
+    }
+
+    .hero-title {
+        color: var(--primary-forest);
+        font-size: 3.5rem;
+        line-height: 1.2;
+    }
+
+    .hero-subtitle {
+        color: #4b5563;
+        font-size: 1.25rem;
+        max-width: 600px;
+    }
+
+    /* İkonların şık kutuları */
+    .feature-box {
+        background: white;
+        border: 1px solid #d1fae5;
+        border-radius: 1.5rem;
+        padding: 2rem;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+        .feature-box:hover {
+            border-color: var(--accent-emerald);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+            transform: translateY(-5px);
+        }
+
+    .icon-circle {
+        width: 64px;
+        height: 64px;
+        background-color: #ecfdf5;
+        color: var(--accent-emerald);
+        border-radius: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        margin-bottom: 1.5rem;
+    }
+</style>
+
+<div class="hero-container">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7 animate__animated animate__fadeInLeft">
+                <span class="badge rounded-pill px-3 py-2 mb-3" style="background-color: #d1fae5; color: var(--primary-forest); font-weight: 600;">
+                    Enterprise Asset Management v1.0
+                </span>
+                <h1 class="hero-title fw-bold mb-4">
+                    Manage Your Assets <br />
+                    <span style="color: var(--accent-emerald)">Without the Chaos.</span>
+                </h1>
+                <p class="hero-subtitle mb-5">
+                    A centralized platform for tracking hardware, assigning equipment to departments,
+                    and keeping an eye on your inventory lifecycle.
+                </p>
+
+                <div class="d-flex gap-3">
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <a asp-controller="Assets" asp-action="Index" class="btn btn-success btn-lg px-5 rounded-pill shadow" style="background-color: var(--primary-forest); border:none;">
+                            Go to Dashboard <i class="bi bi-arrow-right ms-2"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Register" class="btn btn-success btn-lg px-5 rounded-pill shadow" style="background-color: var(--accent-emerald); border:none;">
+                            Get Started <i class="bi bi-rocket-takeoff ms-2"></i>
+                        </a>
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-outline-dark btn-lg px-5 rounded-pill">
+                            Login
+                        </a>
+                    }
+                </div>
+            </div>
+
+            <div class="col-lg-5 d-none d-lg-block animate__animated animate__zoomIn text-center">
+                <i class="bi bi-boxes" style="font-size: 15rem; color: var(--primary-forest); opacity: 0.1;"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5 pb-5">
+    <div class="row g-4 text-center text-md-start">
+        <div class="col-md-4">
+            <div class="feature-box">
+                <div class="icon-circle shadow-sm mx-auto mx-md-0">
+                    <i class="bi bi-search"></i>
+                </div>
+                <h4 class="fw-bold">Real-time Tracking</h4>
+                <p class="text-muted mb-0">Monitor every piece of equipment from delivery to retirement. Know exactly who has what.</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="feature-box">
+                <div class="icon-circle shadow-sm mx-auto mx-md-0">
+                    <i class="bi bi-diagram-3"></i>
+                </div>
+                <h4 class="fw-bold">Department Sync</h4>
+                <p class="text-muted mb-0">Assign assets to specific departments like IT, HR, or Finance with one click.</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="feature-box">
+                <div class="icon-circle shadow-sm mx-auto mx-md-0">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+                <h4 class="fw-bold">Audit & Logs</h4>
+                <p class="text-muted mb-0">Full visibility into who accessed what. Secure and transparent audit logs for compliance.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="system-status-info text-center py-4 bg-white border-top border-bottom">
+    <div class="container">
+        <small class="text-muted text-uppercase fw-bold ls-wide" style="letter-spacing: 1px;">System Health & Info</small>
+        <div class="d-flex flex-wrap justify-content-center align-items-center mt-3 gap-3">
+            <div class="d-flex align-items-center">
+                <span class="d-inline-block rounded-circle me-2 @(Model.IsApiOnline ? "bg-success" : "bg-danger")" style="width: 10px; height: 10px;"></span>
+                <span class="small fw-semibold">API @(Model.IsApiOnline ? "Online" : "Offline")</span>
+            </div>
+            <span class="text-light d-none d-md-inline">|</span>
+            <span class="small text-muted"><i class="bi bi-person me-1"></i> Developer: <strong>@Model.Student</strong></span>
+            <span class="text-light d-none d-md-inline">|</span>
+            <span class="small text-muted"><i class="bi bi-gear me-1"></i> Env: <strong>@Model.Environment</strong></span>
+            <span class="text-light d-none d-md-inline">|</span>
+            <span class="small text-muted"><i class="bi bi-clock me-1"></i> Server UTC: @Model.ServerTimeUtc</span>
+        </div>
+    </div>
 </div>

@@ -12,5 +12,6 @@ namespace AssetManager.Application.Interfaces.Repositories
         Task<IEnumerable<AuditLogEntity>> GetAllLogsAsync();
         Task<IEnumerable<AuditLogEntity>> GetLogsByEntityAsync(string entityName, string entityId);
         Task<int> SaveChangesAsync();
+        Task<IEnumerable<AuditLogEntity>> GetRecentLogsAsync(int count);
     }
 }

@@ -22,7 +22,7 @@ public class MappingProfile : Profile
         CreateMap<AssetEntity, AssetResponseDto>()
             .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Value)) // ÖNEMLİ: Value'yu Price'a eşle
             .ForMember(dest => dest.AssignedUserName, opt => opt.MapFrom(src => src.AssignedUser != null ? src.AssignedUser.FullName : "None"))
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
 
         // Request DTO -> Entity
         CreateMap<CreateAssetRequestDto, AssetEntity>()

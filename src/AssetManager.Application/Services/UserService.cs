@@ -15,7 +15,7 @@ public class UserService(
     {
         // HasQueryFilter sayesinde !u.IsDeleted yazmamıza gerek kalmadı.
         // Artık repository'den direkt tüm aktif kullanıcıları çekebiliriz.
-        var users = await userRepository.GetAllAsync();
+        var users = await userRepository.GetAllWithDetailsAsync();
         return mapper.Map<IEnumerable<UserDto>>(users);
     }
 

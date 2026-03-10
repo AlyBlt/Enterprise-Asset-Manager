@@ -1,0 +1,96 @@
+﻿@model AssetManager.Web.Models.AuditLog.AuditLogViewModel
+
+@{
+    ViewData["Title"] = "System Audit Logs";
+}
+
+<div class="container py-5 animate__animated animate__fadeIn">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-dark mb-1">
+                <i class="bi bi-activity text-primary me-2"></i>System Audit Logs
+            </h2>
+            <p class="text-muted small mb-0">Track all administrative actions and system changes in real-time.</p>
+        </div>
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" onclick="window.location.reload()">
+            <i class="bi bi-arrow-clockwise me-1"></i> Refresh Logs
+        </button>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-4 py-3 text-uppercase small fw-bold" style="width: 180px;">Timestamp (UTC)</th>
+                        <th class="py-3 text-uppercase small fw-bold">User / IP</th>
+                        <th class="py-3 text-uppercase small fw-bold">Action</th>
+                        <th class="py-3 text-uppercase small fw-bold">Entity</th>
+                        <th class="py-3 text-uppercase small fw-bold">Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var log in Model.Logs.OrderByDescending(l => l.TimestampUtc))
+                    {
+                        <tr>
+                            <td class="ps-4">
+                                <div class="fw-medium text-dark">@log.TimestampUtc.ToString("dd.MM.yyyy")</div>
+                                <div class="text-muted small">@log.TimestampUtc.ToString("HH:mm:ss")</div>
+                            </td>
+                            <td>
+                                <div class="fw-bold text-dark">@log.UserName</div>
+                                <div class="badge bg-light text-secondary border fw-normal" style="font-size: 0.7rem;">
+                                    <i class="bi bi-pc-display me-1"></i>@log.IpAddress
+                                </div>
+                            </td>
+                            <td>
+                                @{
+                                    var badgeClass = log.Action switch
+                                    {
+                                        "Delete" => "bg-danger",
+                                        "Update-Role" => "bg-warning text-dark",
+                                        "Create" => "bg-success",
+                                        "Login" => "bg-info",
+                                        _ => "bg-secondary"
+                                    };
+                                }
+                                <span class="badge @badgeClass rounded-pill px-3">@log.Action</span>
+                            </td>
+                            <td>
+                                <span class="text-primary fw-medium">@log.EntityName</span>
+                                <span class="text-muted small">#@log.EntityId</span>
+                            </td>
+                            <td>
+                                <div class="text-truncate small" style="max-width: 300px;" title="@log.Details">
+                                    @log.Details
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    @if (!Model.Logs.Any())
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-5 text-muted">
+                                <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                No logs found in the system.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <style>
+        .table thead th {
+            border-bottom: none;
+            letter-spacing: 0.5px;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+    </style>
+}

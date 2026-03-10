@@ -7,6 +7,6 @@ namespace AssetManager.Application.Interfaces.Repositories
 {
     public interface IDepartmentRepository : IGenericRepository<DepartmentEntity>
     {
-        // İhtiyaç halinde department detaylı sorgular buraya.
+        Task<IEnumerable<DepartmentEntity>> GetAllWithUsersAsync();
     }
 }

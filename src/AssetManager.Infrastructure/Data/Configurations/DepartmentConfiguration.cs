@@ -17,7 +17,8 @@ internal class DepartmentConfiguration : BaseEntityConfiguration<DepartmentEntit
                .HasMaxLength(100);
 
         builder.HasIndex(d => d.Name)
-               .IsUnique();
+               .IsUnique()
+               .HasFilter("[IsDeleted] = 0");
 
         // 3. Açıklama (Max 500 Karakter)
         builder.Property(d => d.Description)

@@ -1,0 +1,149 @@
+﻿@model AssetManager.Web.Models.Department.DepartmentIndexViewModel
+
+@{
+    ViewData["Title"] = Model.PageTitle;
+}
+
+<div class="container-fluid animate__animated animate__fadeIn">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-dark mb-1">@Model.PageTitle</h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Dashboard" asp-action="Index" class="text-success text-decoration-none">Dashboard</a>
+                    </li>
+                    <li class="breadcrumb-item active">Organization</li>
+                </ol>
+            </nav>
+        </div>
+
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Create" class="btn btn-success rounded-pill px-4 shadow-sm">
+                <i class="bi bi-plus-lg me-2"></i>Add New Department
+            </a>
+        }
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light border-bottom">
+                        <tr>
+                            <th class="ps-4 py-3 text-muted fw-semibold">DEPARTMENT NAME</th>
+                            <th class="py-3 text-muted fw-semibold">DESCRIPTION</th>
+                            <th class="py-3 text-muted fw-semibold text-center">EMPLOYEES</th>
+                            <th class="pe-4 py-3 text-end text-muted fw-semibold">ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var dept in Model.Departments)
+                        {
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-success bg-opacity-10 p-2 rounded-3 me-3 text-success">
+                                            <i class="bi bi-building fs-5"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold text-dark">@dept.Name</div>
+                                            <small class="text-muted">ID: #@dept.Id</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="text-secondary small">@(string.IsNullOrEmpty(dept.Description) ? "No description provided." : dept.Description)</span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-light text-dark border fw-medium px-3 py-2 rounded-pill">
+                                        <i class="bi bi-people me-1"></i> @dept.UserCount Staff
+                                    </span>
+                                </td>
+                                <td class="pe-4 text-end">
+                                    <div class="btn-group shadow-sm rounded-pill overflow-hidden">
+                                        <a asp-action="Details" asp-route-id="@dept.Id" class="btn btn-white btn-sm px-3 border-end" title="View Details">
+                                            <i class="bi bi-eye text-primary"></i>
+                                        </a>
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <button type="button" class="btn btn-white btn-sm px-3" title="Delete"
+                                                    onclick="confirmDelete(@dept.Id, '@dept.Name')">
+                                                <i class="bi bi-trash3 text-danger"></i>
+                                            </button>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (User.IsInRole("Admin"))
+{
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow rounded-4">
+                <div class="modal-header border-0 pb-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center py-4">
+                    <div class="text-danger mb-3">
+                        <i class="bi bi-exclamation-octagon fs-1"></i>
+                    </div>
+                    <h4 class="fw-bold">Confirm Delete</h4>
+                    <p class="text-muted">Are you sure you want to delete <strong id="deleteDeptName" class="text-dark"></strong>?</p>
+                </div>
+                <div class="modal-footer border-0 justify-content-center pb-4">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                    <form id="deleteForm" asp-action="Delete" method="post">
+                        <input type="hidden" name="id" id="deleteDeptId" />
+                        <button type="submit" class="btn btn-danger rounded-pill px-4">Yes, Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<style>
+    /* Sayfa arka plan rengi Asset sayfanla uyumlu açık yeşil/gri tonu */
+    body {
+        background-color: #f9fafb;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(16, 185, 129, 0.02);
+    }
+
+    .btn-white {
+        background-color: #fff;
+        border: 1px solid #edf2f7;
+    }
+
+        .btn-white:hover {
+            background-color: #f8fafc;
+        }
+
+    .rounded-4 {
+        border-radius: 1rem !important;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        function confirmDelete(id, name) {
+            document.getElementById('deleteDeptId').value = id;
+            document.getElementById('deleteDeptName').innerText = name;
+
+            // Bootstrap 5 Modal Başlatma
+            var myModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            myModal.show();
+        }
+    </script>
+}

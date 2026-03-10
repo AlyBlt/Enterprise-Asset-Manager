@@ -12,5 +12,6 @@ namespace AssetManager.Application.DTOs.User
         public string Email { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
         public string? DepartmentName { get; set; } // İlişkili tablodan sadece isim alacağız
+        public int? DepartmentId { get; set; }
     }
 }

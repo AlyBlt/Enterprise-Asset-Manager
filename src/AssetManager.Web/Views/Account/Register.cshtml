@@ -1,0 +1,155 @@
+﻿@model AssetManager.Web.Models.Auth.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Create Account";
+}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    }
+
+    .register-card {
+        border: none;
+        border-radius: 1rem;
+        transition: transform 0.3s ease;
+    }
+
+    .btn-green {
+        background-color: #10b981;
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: 0.75rem;
+    }
+
+        .btn-green:hover {
+            background-color: #059669;
+            color: white;
+        }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #10b981;
+        box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25);
+    }
+
+    .register-icon {
+        background-color: #ecfdf5;
+        color: #10b981;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 1.5rem;
+    }
+</style>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger border-0 shadow-sm d-flex align-items-start mb-4 animate__animated animate__shakeX" role="alert">
+        <i class="bi bi-shield-exclamation fs-4 me-3 mt-1"></i>
+        <div>
+            <h6 class="alert-heading mb-1 fw-bold">Whoops! Something went wrong</h6>
+            <div asp-validation-summary="ModelOnly" class="small text-danger"></div>
+        </div>
+        <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row justify-content-center align-items-center" style="min-height: 85vh; padding: 2rem 0;">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-lg register-card">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <div class="register-icon shadow-sm">
+                        <i class="bi bi-person-plus-fill"></i>
+                    </div>
+                    <h3 class="fw-bold text-dark">Join AssetManager</h3>
+                    <p class="text-muted small">Create your account to start tracking assets</p>
+                </div>
+
+                <form asp-action="Register" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Username" class="form-label fw-semibold text-secondary small">Username</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-at"></i></span>
+                                <input asp-for="Username" class="form-control bg-light border-start-0 ps-0" placeholder="johndoe" />
+                            </div>
+                            <span asp-validation-for="Username" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="FullName" class="form-label fw-semibold text-secondary small">Full Name</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-person"></i></span>
+                                <input asp-for="FullName" class="form-control bg-light border-start-0 ps-0" placeholder="John Doe" />
+                            </div>
+                            <span asp-validation-for="FullName" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label fw-semibold text-secondary small">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-envelope"></i></span>
+                            <input asp-for="Email" class="form-control bg-light border-start-0 ps-0" placeholder="name@company.com" />
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="DepartmentId" class="form-label fw-semibold text-secondary small">Department</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-building"></i></span>
+                            <select asp-for="DepartmentId" class="form-select bg-light border-start-0 ps-0">
+                                <option value="">Select your department...</option>
+                                <option value="1">IT Department</option>
+                                <option value="2">Human Resources</option>
+                                <option value="3">Finance</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="DepartmentId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Password" class="form-label fw-semibold text-secondary small">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-key"></i></span>
+                                <input asp-for="Password" type="password" class="form-control bg-light border-start-0 ps-0" placeholder="••••••••" />
+                            </div>
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="ConfirmPassword" class="form-label fw-semibold text-secondary small">Confirm Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-shield-check"></i></span>
+                                <input asp-for="ConfirmPassword" type="password" class="form-control bg-light border-start-0 ps-0" placeholder="••••••••" />
+                            </div>
+                            <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-green rounded-pill shadow-sm">
+                            Create Account <i class="bi bi-check-lg ms-2"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer bg-white border-0 text-center pb-4">
+                <p class="text-muted small mb-0">
+                    Already have an account?
+                    <a asp-action="Login" class="text-success fw-bold text-decoration-none">Login Here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

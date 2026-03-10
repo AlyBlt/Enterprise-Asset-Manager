@@ -23,8 +23,9 @@ public class AuthService(
         var validationResult = await registerValidator.ValidateAsync(request);
         if (!validationResult.IsValid)
         {
-            // Middleware bu hatayı yakalayıp 400 Bad Request dönecek
-            throw new FluentValidation.ValidationException(validationResult.Errors);
+            // Exception fırlatmak yerine mesajları birleştirip dönüyoruz
+            var errorMessages = string.Join(" ", validationResult.Errors.Select(e => e.ErrorMessage));
+            return new AuthResponseDto { IsSuccess = false, Message = errorMessages };
         }
 
         var users = await userRepository.FindAsync(u => u.Username == request.Username || u.Email == request.Email);
@@ -60,7 +61,8 @@ public class AuthService(
         var validationResult = await loginValidator.ValidateAsync(request);
         if (!validationResult.IsValid)
         {
-            throw new FluentValidation.ValidationException(validationResult.Errors);
+            var errorMessages = string.Join(" ", validationResult.Errors.Select(e => e.ErrorMessage));
+            return new AuthResponseDto { IsSuccess = false, Message = errorMessages };
         }
 
         var user = await userRepository.GetByUsernameWithDetailsAsync(request.Username);

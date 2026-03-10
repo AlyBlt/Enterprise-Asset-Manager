@@ -19,6 +19,7 @@ namespace AssetManager.Application
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuditLogService, AuditLogService>();
             services.AddScoped<IDepartmentService, DepartmentService>();
+            services.AddScoped<IDashboardService, DashboardService>();
 
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 

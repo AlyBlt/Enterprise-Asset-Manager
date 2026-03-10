@@ -40,7 +40,7 @@ namespace AssetManager.Infrastructure.Data
                         Username = "admin",
                         FullName = "System Admin",
                         Email = "admin@enterprise.com",
-                        PasswordHash = "admin123", // Test amaçlı
+                        PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin123"),
                         Role = Roles.Admin,
                         DepartmentId = itDept.Id
                     };
@@ -50,7 +50,7 @@ namespace AssetManager.Infrastructure.Data
                         Username = "jdoe",
                         FullName = "John Doe",
                         Email = "j.doe@enterprise.com",
-                        PasswordHash = "editor123",
+                        PasswordHash = BCrypt.Net.BCrypt.HashPassword("editor123"),
                         Role = Roles.Editor,
                         DepartmentId = hrDept.Id
                     };
@@ -60,7 +60,7 @@ namespace AssetManager.Infrastructure.Data
                         Username = "awinehouse",
                         FullName = "Amy Winehouse",
                         Email = "j.doe@enterprise.com",
-                        PasswordHash = "user123",
+                        PasswordHash = BCrypt.Net.BCrypt.HashPassword("user123"),
                         Role = Roles.Guest,
                         DepartmentId = hrDept.Id
                     };
@@ -79,7 +79,8 @@ namespace AssetManager.Infrastructure.Data
                                 Category = "Laptop",
                                 SerialNumber = "AAPL-123456",
                                 Value = 85000.00m,
-                                AssignedUserId = adminUser.Id
+                                AssignedUserId = adminUser.Id,
+                                Status = AssetStatus.Assigned 
                             },
                             new AssetEntity
                             {
@@ -87,7 +88,8 @@ namespace AssetManager.Infrastructure.Data
                                 Category = "Monitor",
                                 SerialNumber = "DELL-987654",
                                 Value = 12500.00m,
-                                AssignedUserId = adminUser.Id
+                                AssignedUserId = adminUser.Id,
+                                Status = AssetStatus.Assigned 
                             },
                             new AssetEntity
                             {
@@ -95,7 +97,8 @@ namespace AssetManager.Infrastructure.Data
                                 Category = "Peripherals",
                                 SerialNumber = "LOGI-456789",
                                 Value = 3500.00m,
-                                AssignedUserId = staffUser.Id
+                                AssignedUserId = staffUser.Id,
+                                Status = AssetStatus.Assigned 
                             }
                         );
                         await context.SaveChangesAsync(cancellationToken);

@@ -32,4 +32,12 @@ internal class AuditLogRepository(AssetManagerDbContext context) : IAuditLogRepo
     {
         return await context.SaveChangesAsync();
     }
+
+    public async Task<IEnumerable<AuditLogEntity>> GetRecentLogsAsync(int count)
+    {
+        return await _dbSet
+            .OrderByDescending(x => x.TimestampUtc) // En yeni en üstte
+            .Take(count) // Sadece count kadar al
+            .ToListAsync();
+    }
 }

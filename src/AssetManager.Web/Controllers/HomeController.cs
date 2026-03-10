@@ -1,24 +1,20 @@
-using System.Diagnostics;
+using AssetManager.Web.Interfaces;
+using AssetManager.Web.Models.Home;
 using Microsoft.AspNetCore.Mvc;
-using AssetManager.Web.Models;
 
 namespace AssetManager.Web.Controllers;
 
-public class HomeController : Controller
+public class HomeController(IHomeApiService homeApiService) : Controller
 {
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
-    }
+        // 1. API'den sistem bilgilerini (öðrenci adý vb.) al
+        var viewModel = await homeApiService.GetSystemInfoAsync() ?? new SystemInfoViewModel();
 
-    public IActionResult Privacy()
-    {
-        return View();
-    }
+        // 2. API online mý kontrol et ve modele ekle
+        viewModel.IsApiOnline = await homeApiService.IsApiHealthyAsync();
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        // 3. Veriyi Dashboard (Index) sayfasýna gönder
+        return View(viewModel);
     }
 }

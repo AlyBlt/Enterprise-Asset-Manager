@@ -22,7 +22,7 @@ public class AssetService(
 
     public async Task<AssetResponseDto?> GetAssetByIdAsync(int id)
     {
-        var asset = await assetRepository.GetByIdAsync(id);
+        var asset = await assetRepository.GetWithUserByIdAsync(id);
         if (asset == null) return null;
 
         return mapper.Map<AssetResponseDto>(asset);

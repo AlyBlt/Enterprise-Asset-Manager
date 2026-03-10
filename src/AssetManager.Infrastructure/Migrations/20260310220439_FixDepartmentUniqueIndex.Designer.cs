@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AssetManager.Infrastructure.Migrations
 {
     [DbContext(typeof(AssetManagerDbContext))]
-    [Migration("20260309233519_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260310220439_FixDepartmentUniqueIndex")]
+    partial class FixDepartmentUniqueIndex
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -84,7 +84,8 @@ namespace AssetManager.Infrastructure.Migrations
                     b.HasIndex("IsDeleted");
 
                     b.HasIndex("Username")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("Users");
                 });
@@ -143,6 +144,10 @@ namespace AssetManager.Infrastructure.Migrations
                     b.HasIndex("AssignedUserId");
 
                     b.HasIndex("IsDeleted");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
 
                     b.HasIndex("SerialNumber")
                         .IsUnique();
@@ -233,7 +238,8 @@ namespace AssetManager.Infrastructure.Migrations
                     b.HasIndex("IsDeleted");
 
                     b.HasIndex("Name")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("Departments");
                 });

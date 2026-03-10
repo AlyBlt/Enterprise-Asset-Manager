@@ -58,6 +58,8 @@
                             <a href="#" class="btn btn-light btn-sm rounded-pill px-3">
                                 <i class="bi bi-printer me-1"></i> Print Info
                             </a>
+                            @if (User.IsInRole("Admin"))
+                           {
                             <a asp-controller="Admin"
                                asp-action="Users"
                                asp-route-departmentId="@Model.Id"
@@ -65,10 +67,11 @@
                                style="background-color: var(--accent-emerald); border:none;">
                                 <i class="bi bi-people me-1"></i> Manage Users
                             </a>
+                           }
                         </div>
                     </div>
                     <div class="d-flex justify-content-center align-items-center mt-4">
-                        <a asp-action="Index" class="btn btn-white btn-sm rounded-circle shadow-sm me-3">
+                        <a asp-action="Index" class="btn btn-white btn-lg rounded-circle shadow-sm me-3">
                             <i class="bi bi-arrow-left text-success"> Back </i>
                         </a>
                     </div>

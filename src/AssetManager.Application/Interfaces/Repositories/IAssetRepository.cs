@@ -9,5 +9,6 @@ namespace AssetManager.Application.Interfaces.Repositories
     {
         // Zimmetlenen kullanıcı bilgisiyle beraber getirmek için özel metod
         Task<IEnumerable<AssetEntity>> GetAllWithUserAsync();
+        Task<AssetEntity?> GetWithUserByIdAsync(int id);
     }
 }

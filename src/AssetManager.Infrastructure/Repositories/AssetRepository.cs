@@ -18,5 +18,11 @@ namespace AssetManager.Infrastructure.Repositories
                 .Where(a => !a.IsDeleted)
                 .ToListAsync();
         }
+        public async Task<AssetEntity?> GetWithUserByIdAsync(int id)
+        {
+            return await _context.Assets
+                .Include(a => a.AssignedUser) // Kullanıcı tablosunu bağla
+                .FirstOrDefaultAsync(a => a.Id == id && !a.IsDeleted);
+        }
     }
 }

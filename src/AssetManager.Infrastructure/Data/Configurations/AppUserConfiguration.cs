@@ -18,7 +18,8 @@ internal class AppUserConfiguration : BaseEntityConfiguration<AppUserEntity>
                .HasMaxLength(50);
 
         builder.HasIndex(u => u.Username)
-               .IsUnique();
+               .IsUnique()
+               .HasFilter("[IsDeleted] = 0");
 
         // 3. Tam Ad (Zorunlu, Max 100 Karakter)
         builder.Property(u => u.FullName)

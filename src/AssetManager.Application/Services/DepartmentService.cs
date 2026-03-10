@@ -15,9 +15,8 @@ public class DepartmentService(
 {
     public async Task<IEnumerable<DepartmentResponseDto>> GetAllDepartmentsAsync()
     {
-        // Global Query Filter (HasQueryFilter) sayesinde .Where(d => !d.IsDeleted) 
-        // yazmamıza gerek yok. EF Core pasifleri otomatik eler.
-        var departments = await departmentRepository.GetAllAsync();
+        var departments = await departmentRepository.GetAllWithUsersAsync();
+
         return mapper.Map<IEnumerable<DepartmentResponseDto>>(departments);
     }
 

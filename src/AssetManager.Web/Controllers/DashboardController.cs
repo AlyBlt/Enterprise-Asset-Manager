@@ -10,9 +10,20 @@ public class DashboardController(IDashboardApiService dashboardApiService) : Con
 {
     public async Task<IActionResult> Index()
     {
-        var model = await dashboardApiService.GetDashboardSummaryAsync();
+       
+        var viewModel = await dashboardApiService.GetDashboardSummaryAsync();
 
-        // Eğer veri gelmezse boş bir model dönerek sayfanın patlamasını engelleriz
-        return View(model ?? new DashboardViewModel());
+        if (viewModel == null)
+        {
+            return View(new DashboardViewModel());
+        }
+
+        // Güvenlik Kontrolü: Admin değilse logları temizle.
+        if (!User.IsInRole("Admin"))
+        {
+            viewModel.RecentActivities.Clear();
+        }
+
+        return View(viewModel);
     }
 }

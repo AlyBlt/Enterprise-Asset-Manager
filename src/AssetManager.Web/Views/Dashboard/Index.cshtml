@@ -66,7 +66,7 @@
         </div>
         <div class="text-end">
             <span class="badge bg-light text-dark p-2 border">
-                <i class="bi bi-calendar3 me-2"></i>@DateTime.Now.ToString("dd MMMM yyyy", new CultureInfo("en-US"))
+                <i class="bi bi-calendar3 me-2"></i>@DateTime.Now.ToString("MM ddd yyyy", new CultureInfo("en-US"))
             </span>
         </div>
     </div>
@@ -161,31 +161,44 @@
                     <h5 class="fw-bold mb-0 text-dark">Recent Activities</h5>
                 </div>
                 <div class="card-body">
-                    <div class="activity-feed">
-                        @if (Model.RecentActivities != null && Model.RecentActivities.Any())
-                        {
-                            @foreach (var activity in Model.RecentActivities)
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="activity-feed">
+                            @if (Model.RecentActivities != null && Model.RecentActivities.Any())
                             {
-                                <div class="activity-item">
-                                    <div class="d-flex justify-content-between mb-1">
-                                        <span class="fw-bold text-dark">@activity.ActionType</span>
-                                        <span class="text-muted" style="font-size: 0.75rem;">@activity.Date</span>
+                                @foreach (var activity in Model.RecentActivities)
+                                {
+                                    <div class="activity-item">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span class="fw-bold text-dark">@activity.ActionType</span>
+                                            <span class="text-muted" style="font-size: 0.75rem;">@activity.Date</span>
+                                        </div>
+                                        <p class="text-muted small mb-0">@activity.Description</p>
                                     </div>
-                                    <p class="text-muted small mb-0">@activity.Description</p>
+                                }
+                            }
+                            else
+                            {
+                                <div class="text-center py-5 text-muted">
+                                    <i class="bi bi-clock-history display-4 opacity-25"></i>
+                                    <p class="mt-2">No recent actions recorded.</p>
                                 </div>
                             }
-                        }
-                        else
-                        {
-                            <div class="text-center py-5 text-muted">
-                                <i class="bi bi-clock-history display-4 opacity-25"></i>
-                                <p class="mt-2">No recent actions recorded.</p>
-                            </div>
-                        }
-                    </div>
-                    <div class="text-center mt-3">
-                        <a href="/AuditLogs" class="btn btn-sm btn-outline-success rounded-pill px-4">View All Logs</a>
-                    </div>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a asp-controller="Admin" asp-action="Logs" class="btn btn-sm btn-outline-success rounded-pill px-4 shadow-sm">
+                                <i class="bi bi-list-check me-1"></i> View All Logs
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="bi bi-shield-lock display-4 text-muted opacity-25"></i>
+                            <p class="mt-3 text-muted">Activity logs are only visible to system administrators.</p>
+                        </div>
+                    }
+                   
                 </div>
             </div>
         </div>

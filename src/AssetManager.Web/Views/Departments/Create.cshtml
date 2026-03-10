@@ -1,0 +1,71 @@
+﻿@model AssetManager.Web.Models.Department.DepartmentCreateViewModel
+
+@{
+    ViewData["Title"] = "Create Department";
+}
+
+<div class="container animate__animated animate__fadeIn py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="d-flex align-items-center mb-4">
+                <a asp-action="Index" class="btn btn-white btn-sm rounded-circle shadow-sm me-3">
+                    <i class="bi bi-arrow-left text-success"></i>
+                </a>
+                <h2 class="fw-bold text-dark mb-0">New Department</h2>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+                        <div class="mb-4">
+                            <label asp-for="Name" class="form-label fw-semibold text-muted small text-uppercase"></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-0"><i class="bi bi-building text-success"></i></span>
+                                <input asp-for="Name" class="form-control border-0 bg-light p-3" placeholder="e.g. IT Department" />
+                            </div>
+                            <span asp-validation-for="Name" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Description" class="form-label fw-semibold text-muted small text-uppercase"></label>
+                            <textarea asp-for="Description" class="form-control border-0 bg-light p-3" rows="3" placeholder="Briefly describe the department's role..."></textarea>
+                            <span asp-validation-for="Description" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-grid mt-5">
+                            <button type="submit" class="btn btn-success rounded-pill py-3 fw-bold shadow-sm">
+                                <i class="bi bi-check-circle me-2"></i>Create Department
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <p class="small text-muted">
+                    <i class="bi bi-info-circle me-1"></i>
+                    Departments are used to organize assets and personnel.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #f9fafb;
+    }
+
+    .btn-white {
+        background-color: #fff;
+        border: 1px solid #edf2f7;
+    }
+
+    .form-control:focus {
+        background-color: #f0fdf4 !important;
+        box-shadow: none;
+        border: 1px solid var(--accent-emerald);
+    }
+</style>

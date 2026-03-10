@@ -72,7 +72,7 @@
                 <div class="d-flex gap-3">
                     @if (User.Identity?.IsAuthenticated == true)
                     {
-                        <a asp-controller="Assets" asp-action="Index" class="btn btn-success btn-lg px-5 rounded-pill shadow" style="background-color: var(--primary-forest); border:none;">
+                        <a asp-controller="Dashboard" asp-action="Index" class="btn btn-success btn-lg px-5 rounded-pill shadow" style="background-color: var(--primary-forest); border:none;">
                             Go to Dashboard <i class="bi bi-arrow-right ms-2"></i>
                         </a>
                     }

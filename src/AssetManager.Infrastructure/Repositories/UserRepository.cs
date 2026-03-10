@@ -15,5 +15,13 @@ namespace AssetManager.Infrastructure.Repositories
                 .Include(u => u.Department)
                 .FirstOrDefaultAsync(u => u.Username == username && !u.IsDeleted);
         }
+
+        public async Task<IEnumerable<AppUserEntity>> GetAllWithDetailsAsync()
+        {
+            return await _context.Users
+                .Include(u => u.Department) // Departman bilgilerini de çek
+                .OrderByDescending(u => u.Id)
+                .ToListAsync();
+        }
     }
 }

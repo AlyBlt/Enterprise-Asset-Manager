@@ -20,6 +20,10 @@ namespace AssetManager.Infrastructure.Data.Configurations
                    .IsRequired()
                    .HasMaxLength(200);
 
+            builder.HasIndex(a => a.Name)
+                   .IsUnique()
+                   .HasFilter("[IsDeleted] = 0");
+
             // 3. Kategori (Max 50 Karakter)
             builder.Property(a => a.Category)
                    .IsRequired()
@@ -32,7 +36,7 @@ namespace AssetManager.Infrastructure.Data.Configurations
 
             builder.HasIndex(a => a.SerialNumber)
                    .IsUnique();
-
+                  
             // 5. Maddi Değer
             builder.Property(a => a.Value)
                    .HasPrecision(18, 2);

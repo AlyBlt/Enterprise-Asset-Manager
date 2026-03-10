@@ -30,5 +30,7 @@ namespace AssetManager.Web.Services
             var response = await _httpClient.DeleteAsync($"api/departments/{id}");
             return response.IsSuccessStatusCode;
         }
+
+
     }
 }

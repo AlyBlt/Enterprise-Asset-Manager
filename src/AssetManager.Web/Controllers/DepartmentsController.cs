@@ -41,4 +41,22 @@ public class DepartmentsController(IDepartmentApiService departmentApiService) :
         await departmentApiService.DeleteAsync(id);
         return RedirectToAction(nameof(Index));
     }
+
+    public async Task<IActionResult> Details(int id)
+    {
+        var departments = await departmentApiService.GetAllAsync();
+        var department = departments.FirstOrDefault(d => d.Id == id);
+
+        if (department == null) return NotFound();
+
+        var viewModel = new DepartmentDetailsViewModel
+        {
+            Id = department.Id,
+            Name = department.Name,
+            Description = department.Description,
+            UserCount = department.UserCount
+        };
+
+        return View(viewModel);
+    }
 }

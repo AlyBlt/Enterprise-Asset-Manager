@@ -1,0 +1,100 @@
+﻿@model AssetManager.Web.Models.Department.DepartmentDetailsViewModel
+
+@{
+    ViewData["Title"] = Model.PageTitle;
+}
+
+<div class="container animate__animated animate__fadeIn py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="d-flex align-items-center">
+                    <h2 class="fw-bold text-dark mb-0">@Model.PageTitle</h2>
+                </div>
+
+                @if (User.IsInRole("Admin"))
+                {
+                    <button class="btn btn-outline-danger btn-sm rounded-pill px-3" onclick="confirmDelete(@Model.Id, '@Model.Name')">
+                        <i class="bi bi-trash me-1"></i> Delete
+                    </button>
+                }
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="p-5 text-center" style="background-color: #ecfdf5;">
+                    <div class="bg-white d-inline-flex p-4 rounded-circle shadow-sm mb-3">
+                        <i class="bi bi-building fs-1 text-success"></i>
+                    </div>
+                    <h3 class="fw-bold text-dark mb-1">@Model.Name</h3>
+                    <span class="badge bg-white text-success border border-success border-opacity-25 px-3 py-2 rounded-pill">
+                        System ID: #@Model.Id
+                    </span>
+                </div>
+
+                <div class="card-body p-4 p-lg-5">
+                    <div class="row g-4">
+                        <div class="col-md-7">
+                            <label class="small text-muted text-uppercase fw-bold ls-wide mb-2 d-block">Description</label>
+                            <p class="text-dark fs-5">
+                                @(string.IsNullOrEmpty(Model.Description) ? "No detailed description provided for this department." : Model.Description)
+                            </p>
+                        </div>
+                        <div class="col-md-5 border-start-md ps-md-4">
+                            <label class="small text-muted text-uppercase fw-bold ls-wide mb-2 d-block">Department Stats</label>
+                            <div class="d-flex align-items-center mt-3 p-3 rounded-3 bg-light">
+                                <div class="h1 fw-bold text-success mb-0 me-3">@Model.UserCount</div>
+                                <div class="small text-secondary fw-medium">Active personnel<br>currently assigned</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-5 opacity-50">
+
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+                        <p class="small text-muted mb-0">
+                            <i class="bi bi-info-circle me-1"></i> Data managed by <strong>AssetManager System</strong>
+                        </p>
+                        <div class="d-flex gap-2">
+                            <a href="#" class="btn btn-light btn-sm rounded-pill px-3">
+                                <i class="bi bi-printer me-1"></i> Print Info
+                            </a>
+                            <a asp-controller="Admin"
+                               asp-action="Users"
+                               asp-route-departmentId="@Model.Id"
+                               class="btn btn-success btn-sm rounded-pill px-3 shadow-sm"
+                               style="background-color: var(--accent-emerald); border:none;">
+                                <i class="bi bi-people me-1"></i> Manage Users
+                            </a>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center mt-4">
+                        <a asp-action="Index" class="btn btn-white btn-sm rounded-circle shadow-sm me-3">
+                            <i class="bi bi-arrow-left text-success"> Back </i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #f9fafb;
+    }
+
+    .btn-white {
+        background-color: #fff;
+        border: 1px solid #edf2f7;
+    }
+
+    .ls-wide {
+        letter-spacing: 0.5px;
+    }
+
+    @@media (min-width: 768px) {
+        .border-start-md {
+            border-left: 1px solid #edf2f7 !important;
+        }
+    }
+</style>

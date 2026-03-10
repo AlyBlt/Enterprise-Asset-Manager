@@ -10,9 +10,17 @@ namespace AssetManager.Web.Controllers;
 public class AdminController(IAdminApiService adminApiService) : Controller
 {
     // 1. Kullanıcı Listesi
-    public async Task<IActionResult> Users()
+    public async Task<IActionResult> Users(int? departmentId)
     {
         var users = await adminApiService.GetAllUsersAsync();
+
+        // Filtreleme mantığı
+        if (departmentId.HasValue)
+        {
+            users = users.Where(u => u.DepartmentId == departmentId.Value);
+            ViewBag.SelectedDepartmentId = departmentId;
+        }
+
         var model = new UserListViewModel { Users = users };
         return View(model);
     }

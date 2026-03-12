@@ -25,17 +25,25 @@ public class AdminController(IAdminApiService adminApiService) : Controller
         return View(model);
     }
 
-    // 2. Rol Değiştirme (İşlem)
+    // 2. Rol Değiştirme
     [HttpPost]
     public async Task<IActionResult> ChangeRole(int userId, string newRole)
     {
-        var result = await adminApiService.ChangeUserRoleAsync(userId, newRole);
-        if (result)
-            TempData["SuccessMessage"] = "User role updated successfully.";
+        // Artık Tuple dönüyoruz: (bool, string)
+        var (isSuccess, message) = await adminApiService.ChangeUserRoleAsync(userId, newRole);
+
+        if (isSuccess)
+        {
+            TempData["SuccessMessage"] = message;
+        }
         else
-            TempData["ErrorMessage"] = "Failed to update user role.";
+        {
+            // API'den gelen o detaylı "Validation Failed" mesajı burada görünecek!
+            TempData["ErrorMessage"] = "API Error: " + message;
+        }
 
         return RedirectToAction(nameof(Users));
+
     }
 
     // 3. Kullanıcı Silme

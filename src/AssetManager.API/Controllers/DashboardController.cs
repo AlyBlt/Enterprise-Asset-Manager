@@ -1,16 +1,16 @@
-﻿using AssetManager.Application.Interfaces.Services;
+﻿using AssetManager.Application.Features.Dashboard.Queries.GetDashboardSummary;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AssetManager.API.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-public class DashboardController(IDashboardService dashboardService) : ControllerBase
+[Authorize] // Genelde dashboard verileri giriş yapmış kullanıcılara özeldir
+public class DashboardController: BaseController 
 {
     [HttpGet("summary")]
     public async Task<IActionResult> GetSummary()
     {
-        var result = await dashboardService.GetSummaryAsync();
+        var result = await Mediator.Send(new GetDashboardSummaryQuery());
         return Ok(result);
     }
 }

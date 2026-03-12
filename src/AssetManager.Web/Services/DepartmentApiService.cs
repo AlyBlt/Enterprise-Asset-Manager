@@ -1,6 +1,6 @@
 ﻿using AssetManager.Application.DTOs.Department;
+using AssetManager.Application.Features.Department.Commands.CreateDepartment;
 using AssetManager.Web.Interfaces;
-using System.Net.Http.Json;
 
 namespace AssetManager.Web.Services
 {
@@ -17,7 +17,7 @@ namespace AssetManager.Web.Services
                 : [];
         }
 
-        public async Task<bool> CreateAsync(CreateDepartmentRequestDto request)
+        public async Task<bool> CreateAsync(CreateDepartmentCommand request)
         {
             AddAuthorizationHeader();
             var response = await _httpClient.PostAsJsonAsync("api/departments", request);

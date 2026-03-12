@@ -1,6 +1,6 @@
 ﻿using AssetManager.Application.DTOs.Asset;
+using AssetManager.Application.Features.Asset.Commands.CreateAsset;
 using AssetManager.Web.Interfaces;
-using System.Net.Http.Json;
 
 namespace AssetManager.Web.Services;
 
@@ -27,7 +27,7 @@ public class AssetApiService(HttpClient httpClient, IHttpContextAccessor httpCon
             : null;
     }
 
-    public async Task<bool> CreateAsync(CreateAssetRequestDto request)
+    public async Task<bool> CreateAsync(CreateAssetCommand request)
     {
         AddAuthorizationHeader();
         var response = await _httpClient.PostAsJsonAsync("api/assets", request);

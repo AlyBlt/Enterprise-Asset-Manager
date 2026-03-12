@@ -1,8 +1,10 @@
-﻿using AssetManager.Application.DTOs.Department;
+﻿using AssetManager.Application.Features.Department.Commands.CreateDepartment;
 using AssetManager.Web.Interfaces;
 using AssetManager.Web.Models.Department;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+namespace AssetManager.Web.Controllers;
 
 [Authorize]
 public class DepartmentsController(IDepartmentApiService departmentApiService) : Controller
@@ -23,10 +25,10 @@ public class DepartmentsController(IDepartmentApiService departmentApiService) :
     {
         if (!ModelState.IsValid) return View(model);
 
-        var result = await departmentApiService.CreateAsync(new CreateDepartmentRequestDto 
-        { Name = model.Name,
-          Description = model.Description
-        });
+        var result = await departmentApiService.CreateAsync(new CreateDepartmentCommand(
+        model.Name,
+        model.Description
+        ));
 
         if (result) return RedirectToAction(nameof(Index));
 

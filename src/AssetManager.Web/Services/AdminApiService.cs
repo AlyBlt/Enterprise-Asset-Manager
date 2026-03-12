@@ -17,12 +17,18 @@ public class AdminApiService(HttpClient httpClient, IHttpContextAccessor httpCon
             : [];
     }
 
-    public async Task<bool> ChangeUserRoleAsync(int userId, string newRole)
+    public async Task<(bool IsSuccess, string? Message)> ChangeUserRoleAsync(int userId, string newRole)
     {
         AddAuthorizationHeader();
         // API tarafındaki endpoint yapına göre role bilgisini query veya body olarak gönderiyoruz
         var response = await _httpClient.PutAsJsonAsync($"api/admin/users/{userId}/role", newRole);
-        return response.IsSuccessStatusCode;
+        if (response.IsSuccessStatusCode)
+        {
+            return (true, "Role updated successfully.");
+        }
+        // API'den gelen hata detayını oku (Middleware'in fırlattığı JSON)
+        var errorJson = await response.Content.ReadAsStringAsync();
+        return (false, errorJson);
     }
 
     public async Task<bool> DeleteUserAsync(int userId)

@@ -68,8 +68,8 @@
                                         </a>
                                         @if (User.IsInRole("Admin"))
                                         {
-                                            <button type="button" class="btn btn-white btn-sm px-3" title="Delete"
-                                                    onclick="confirmDelete(@dept.Id, '@dept.Name')">
+                                            <button type="button" class="btn btn-white btn-sm px-3 d-inline" title="Delete"
+                                                    onclick="confirmDelete(@dept.Id, '@dept.Name', '@Url.Action("Delete", "Department")')">
                                                 <i class="bi bi-trash3 text-danger"></i>
                                             </button>
                                         }
@@ -84,66 +84,12 @@
     </div>
 </div>
 
-@if (User.IsInRole("Admin"))
-{
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow rounded-4">
-                <div class="modal-header border-0 pb-0">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center py-4">
-                    <div class="text-danger mb-3">
-                        <i class="bi bi-exclamation-octagon fs-1"></i>
-                    </div>
-                    <h4 class="fw-bold">Confirm Delete</h4>
-                    <p class="text-muted">Are you sure you want to delete <strong id="deleteDeptName" class="text-dark"></strong>?</p>
-                </div>
-                <div class="modal-footer border-0 justify-content-center pb-4">
-                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
-                    <form id="deleteForm" asp-action="Delete" method="post">
-                        <input type="hidden" name="id" id="deleteDeptId" />
-                        <button type="submit" class="btn btn-danger rounded-pill px-4">Yes, Delete</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/index-common.css" asp-append-version="true" />
+      
 }
-
-<style>
-    /* Sayfa arka plan rengi Asset sayfanla uyumlu açık yeşil/gri tonu */
-    body {
-        background-color: #f9fafb;
-    }
-
-    .table-hover tbody tr:hover {
-        background-color: rgba(16, 185, 129, 0.02);
-    }
-
-    .btn-white {
-        background-color: #fff;
-        border: 1px solid #edf2f7;
-    }
-
-        .btn-white:hover {
-            background-color: #f8fafc;
-        }
-
-    .rounded-4 {
-        border-radius: 1rem !important;
-    }
-</style>
-
 @section Scripts {
-    <script>
-        function confirmDelete(id, name) {
-            document.getElementById('deleteDeptId').value = id;
-            document.getElementById('deleteDeptName').innerText = name;
-
-            // Bootstrap 5 Modal Başlatma
-            var myModal = new bootstrap.Modal(document.getElementById('deleteModal'));
-            myModal.show();
-        }
-    </script>
+    <partial name="_DeleteConfirmationPartial" />
 }
+

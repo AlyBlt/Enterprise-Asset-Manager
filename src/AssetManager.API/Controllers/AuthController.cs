@@ -1,32 +1,30 @@
-﻿using AssetManager.Application.DTOs.Auth;
-using AssetManager.Application.Interfaces.Services;
+﻿using AssetManager.Application.Features.Auth.Commands.Login;
+using AssetManager.Application.Features.Auth.Commands.Register;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AssetManager.API.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-public class AuthController(IAuthService authService) : ControllerBase
+[AllowAnonymous] // Auth işlemleri genellikle herkese açıktır
+public class AuthController : BaseController
 {
-    [AllowAnonymous]
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
+    public async Task<IActionResult> Register([FromBody] RegisterCommand command)
     {
-        if (request == null) return BadRequest("Invalid request");
-        var result = await authService.RegisterAsync(request);
+        // ValidationBehavior hatalı girişi zaten yakalayıp Exception fırlatacaktır.
+        var result = await Mediator.Send(command);
+
         if (!result.IsSuccess)
             return BadRequest(result);
 
         return Ok(result);
     }
 
-    [AllowAnonymous]
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
+    public async Task<IActionResult> Login([FromBody] LoginCommand command)
     {
-        if (request == null) return BadRequest("Invalid request");
-        var result = await authService.LoginAsync(request);
+        var result = await Mediator.Send(command);
+
         if (!result.IsSuccess)
             return Unauthorized(result);
 

@@ -1,13 +1,14 @@
 ﻿using AssetManager.Application.DTOs.Auth;
+using AssetManager.Application.Features.Auth.Commands.Login;
+using AssetManager.Application.Features.Auth.Commands.Register;
 using AssetManager.Web.Interfaces;
-using System.Net.Http.Json;
 
 namespace AssetManager.Web.Services;
 
 public class AuthApiService(HttpClient httpClient, IHttpContextAccessor httpContextAccessor)
     : BaseApiService(httpClient, httpContextAccessor), IAuthApiService
 {
-    public async Task<AuthResponseDto?> LoginAsync(LoginRequestDto loginRequest)
+    public async Task<AuthResponseDto?> LoginAsync(LoginCommand loginRequest)
     {
         // Login işleminde henüz token olmadığı için AddAuthorizationHeader çağırmıyoruz
         var response = await _httpClient.PostAsJsonAsync("api/auth/login", loginRequest);
@@ -20,7 +21,7 @@ public class AuthApiService(HttpClient httpClient, IHttpContextAccessor httpCont
         return null;
     }
 
-    public async Task<AuthResponseDto?> RegisterAsync(RegisterRequestDto registerRequest)
+    public async Task<AuthResponseDto?> RegisterAsync(RegisterCommand registerRequest)
     {
         var response = await _httpClient.PostAsJsonAsync("api/auth/register", registerRequest);
 

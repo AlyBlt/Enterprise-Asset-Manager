@@ -4,54 +4,6 @@
     ViewData["Title"] = "Login";
 }
 
-<style>
-    body {
-        /* Arka plana çok hafif bir yeşil degrade ekle */
-        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-    }
-
-    .login-card {
-        border: none;
-        border-radius: 1rem;
-        transition: transform 0.3s ease;
-    }
-
-        .login-card:hover {
-            transform: translateY(-5px);
-        }
-
-    .btn-green {
-        background-color: #10b981; /* Emerald Green */
-        border: none;
-        color: white;
-        font-weight: 600;
-        padding: 0.75rem;
-    }
-
-        .btn-green:hover {
-            background-color: #059669;
-            color: white;
-        }
-
-    .form-control:focus {
-        border-color: #10b981;
-        box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25);
-    }
-
-    .login-icon {
-        background-color: #ecfdf5;
-        color: #10b981;
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 1.5rem;
-        font-size: 1.5rem;
-    }
-</style>
-
 @if (!ViewData.ModelState.IsValid)
 {
     <div class="alert alert-danger border-0 shadow-sm d-flex align-items-start mb-4 animate__animated animate__shakeX" role="alert">
@@ -129,3 +81,59 @@
         </div>
     </div>
 </div>
+
+@section Styles{
+    <style>
+        body {
+            /* Arka plana çok hafif bir yeşil degrade ekle */
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        }
+
+        .login-card {
+            border: none;
+            border-radius: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+            .login-card:hover {
+                transform: translateY(-5px);
+            }
+
+        .btn-green {
+            background-color: #10b981; /* Emerald Green */
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem;
+        }
+
+            .btn-green:hover {
+                background-color: #059669;
+                color: white;
+            }
+
+        .form-control:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25);
+        }
+
+        .login-icon {
+            background-color: #ecfdf5;
+            color: #10b981;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .form-control::placeholder {
+            color: #6b7280; /* gri ton, daha soluk */
+            opacity: 0.5; /* ekstra solukluk için */
+        }
+    </style>
+
+}

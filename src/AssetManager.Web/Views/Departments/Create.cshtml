@@ -8,13 +8,19 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="d-flex align-items-center mb-4">
-                <a asp-action="Index" class="btn btn-white btn-sm rounded-circle shadow-sm me-3">
+                <a asp-action="Index" class="btn btn-light rounded-circle me-3 shadow-sm">
                     <i class="bi bi-arrow-left text-success"></i>
                 </a>
-                <h2 class="fw-bold text-dark mb-0">New Department</h2>
+                <div>
+                <h2 class="fw-bold text-dark mb-0">Add New Department</h2>
+                <p class="text-muted small mb-0">Enter the required information to create the new department.</p>
+                </div>
             </div>
 
             <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-success bg-opacity-10 py-3 border-0">
+                    <h6 class="mb-0 text-success fw-bold"><i class="bi bi-pencil-square me-2"></i>Department Information</h6>
+                </div>
                 <div class="card-body p-4">
                     <form asp-action="Create" method="post">
                         <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
@@ -34,9 +40,10 @@
                             <span asp-validation-for="Description" class="text-danger small"></span>
                         </div>
 
-                        <div class="d-grid mt-5">
-                            <button type="submit" class="btn btn-success rounded-pill py-3 fw-bold shadow-sm">
-                                <i class="bi bi-check-circle me-2"></i>Create Department
+                        <div class="mt-5 d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-action="Index" class="btn btn-light px-5 rounded-pill fw-semibold">Cancel</a>
+                            <button type="submit" class="btn btn-success rounded-pill px-5 fw-bold shadow">
+                               <i class="bi bi-check-circle me-2"></i>Create Department
                             </button>
                         </div>
                     </form>
@@ -53,19 +60,12 @@
     </div>
 </div>
 
+@section Styles {
 <style>
-    body {
-        background-color: #f9fafb;
-    }
-
-    .btn-white {
-        background-color: #fff;
-        border: 1px solid #edf2f7;
-    }
-
-    .form-control:focus {
-        background-color: #f0fdf4 !important;
-        box-shadow: none;
-        border: 1px solid var(--accent-emerald);
+  
+    .form-control::placeholder {
+        color: #6b7280; 
+        opacity: 0.5;
     }
 </style>
+}

@@ -69,13 +69,10 @@
                                         </a>
                                         @if (User.IsInRole("Admin"))
                                         {
-                                            <form asp-action="Delete" asp-route-id="@asset.Id" method="post"
-                                                  onsubmit="return confirm('Are you sure you want to delete this asset?');"
-                                                  class="d-inline">
-                                                <button type="submit" class="btn btn-white btn-sm px-3" title="Delete">
-                                                    <i class="bi bi-trash3 text-danger"></i>
-                                                </button>
-                                            </form>
+                                            <button type="button" class="btn btn-white btn-sm px-3" title="Delete"
+                                                    onclick="confirmDelete(@asset.Id, '@asset.Name', '@Url.Action("Delete", "Asset")')">
+                                                <i class="bi bi-trash3 text-danger"></i>
+                                            </button>
                                         }
                                     </div>
                                 </td>
@@ -88,17 +85,10 @@
     </div>
 </div>
 
-<style>
-    .table-hover tbody tr:hover {
-        background-color: rgba(16, 185, 129, 0.02);
-    }
+@section Styles {
+    <link rel="stylesheet" href="~/css/index-common.css" asp-append-version="true" />
 
-    .btn-white {
-        background-color: #fff;
-        border: 1px solid #edf2f7;
-    }
-
-        .btn-white:hover {
-            background-color: #f8fafc;
-        }
-</style>
+}
+@section Scripts {
+    <partial name="_DeleteConfirmationPartial" />
+}

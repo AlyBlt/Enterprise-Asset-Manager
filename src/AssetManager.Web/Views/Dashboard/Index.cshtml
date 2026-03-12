@@ -5,59 +5,6 @@
     ViewData["Title"] = "Dashboard";
 }
 
-<style>
-    /* İstatistik Kartları İçin Özel Efektler */
-    .stat-card {
-        border: none;
-        border-radius: 12px;
-        transition: transform 0.2s;
-    }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-
-    .icon-box {
-        width: 50px;
-        height: 50px;
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-    }
-
-    /* Timeline (Son Hareketler) Tasarımı */
-    .activity-feed {
-        padding: 0;
-        list-style: none;
-    }
-
-    .activity-item {
-        position: relative;
-        padding-left: 25px;
-        padding-bottom: 20px;
-        border-left: 2px solid #e9ecef;
-    }
-
-        .activity-item::before {
-            content: "";
-            position: absolute;
-            left: -7px;
-            top: 0;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: var(--accent-emerald);
-            border: 2px solid #fff;
-        }
-
-        .activity-item:last-child {
-            border-left-color: transparent;
-        }
-</style>
-
 <div class="container-fluid py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
@@ -204,3 +151,58 @@
         </div>
     </div>
 </div>
+
+@section Styles {
+    <style>
+        /* İstatistik Kartları İçin Özel Efektler */
+        .stat-card {
+            border: none;
+            border-radius: 12px;
+            transition: transform 0.2s;
+        }
+
+            .stat-card:hover {
+                transform: translateY(-5px);
+            }
+
+        .icon-box {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        /* Timeline (Son Hareketler) Tasarımı */
+        .activity-feed {
+            padding: 0;
+            list-style: none;
+        }
+
+        .activity-item {
+            position: relative;
+            padding-left: 25px;
+            padding-bottom: 20px;
+            border-left: 2px solid #e9ecef;
+        }
+
+            .activity-item::before {
+                content: "";
+                position: absolute;
+                left: -7px;
+                top: 0;
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                background-color: var(--accent-emerald);
+                border: 2px solid #fff;
+            }
+
+            .activity-item:last-child {
+                border-left-color: transparent;
+            }
+    </style>
+}

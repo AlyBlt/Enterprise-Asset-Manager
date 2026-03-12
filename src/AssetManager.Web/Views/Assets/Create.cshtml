@@ -9,7 +9,7 @@
         <div class="col-lg-8">
             <div class="d-flex align-items-center mb-4">
                 <a asp-action="Index" class="btn btn-light rounded-circle me-3 shadow-sm">
-                    <i class="bi bi-arrow-left text-dark"></i>
+                    <i class="bi bi-arrow-left text-success"></i>
                 </a>
                 <div>
                     <h2 class="fw-bold text-dark mb-0">Add New Asset</h2>
@@ -83,6 +83,16 @@
         </div>
     </div>
 </div>
+
+@section Styles {
+    <style>
+     
+        .form-control::placeholder {
+        color: #6b7280; 
+        opacity: 0.5;   
+    }
+    </style>
+}
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

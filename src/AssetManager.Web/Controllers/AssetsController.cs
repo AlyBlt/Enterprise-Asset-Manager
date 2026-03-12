@@ -1,4 +1,4 @@
-﻿using AssetManager.Application.DTOs.Asset;
+﻿using AssetManager.Application.Features.Asset.Commands.CreateAsset;
 using AssetManager.Web.Interfaces;
 using AssetManager.Web.Models.Asset;
 using Microsoft.AspNetCore.Authorization;
@@ -31,16 +31,15 @@ public class AssetsController(IAssetApiService assetApiService) : Controller
     {
         if (!ModelState.IsValid) return View(model);
 
-        var requestDto = new CreateAssetRequestDto
-        {
-            Name = model.Name,
-            Description = model.Description,
-            Price = model.Price,
-            Category = model.Category,
-            SerialNumber = model.SerialNumber
-        };
+        var command = new CreateAssetCommand(
+        model.Name,
+        model.Description,
+        model.Price,
+        model.Category,
+        model.SerialNumber
+        );
 
-        var result = await assetApiService.CreateAsync(requestDto);
+        var result = await assetApiService.CreateAsync(command);
 
         if (result) return RedirectToAction(nameof(Index));
 

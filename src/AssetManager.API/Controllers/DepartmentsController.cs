@@ -1,36 +1,41 @@
-﻿using AssetManager.Application.DTOs.Department;
-using AssetManager.Application.Interfaces.Services;
+﻿using AssetManager.Application.Features.Department.Commands.CreateDepartment;
+using AssetManager.Application.Features.Department.Commands.DeleteDepartment;
+using AssetManager.Application.Features.Department.Queries.GetAllDepartments;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AssetManager.API.Controllers
+namespace AssetManager.API.Controllers;
+
+[Authorize]
+public class DepartmentsController : BaseController
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    [Authorize]
-    public class DepartmentsController(IDepartmentService departmentService) : ControllerBase
+    // Tüm departmanları listele
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
     {
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            return Ok(await departmentService.GetAllDepartmentsAsync());
-        }
+        var result = await Mediator.Send(new GetAllDepartmentsQuery());
+        return Ok(result);
+    }
 
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Create([FromBody] CreateDepartmentRequestDto request)
-        {
-            var result = await departmentService.CreateDepartmentAsync(request);
-            return result ? Ok(new { message = "Department is added." }) : BadRequest();
-        }
+    // Yeni departman ekle (Sadece Admin)
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Create([FromBody] CreateDepartmentCommand command)
+    {
+        var result = await Mediator.Send(command);
+        return result
+            ? Ok(new { message = "Department is added." })
+            : BadRequest();
+    }
 
-        [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var result = await departmentService.DeleteDepartmentAsync(id);
-            return result ? Ok(new { message = "Department is deleted." }) : NotFound();
-        }
+    // Departman sil (Sadece Admin)
+    [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var result = await Mediator.Send(new DeleteDepartmentCommand(id));
+        return result
+            ? Ok(new { message = "Department is deleted." })
+            : NotFound();
     }
 }

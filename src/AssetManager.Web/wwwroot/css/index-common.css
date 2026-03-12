@@ -1,0 +1,12 @@
+﻿.table-hover tbody tr:hover {
+    background-color: rgba(16, 185, 129, 0.02);
+}
+
+.btn-white {
+    background-color: #fff;
+    border: 1px solid #edf2f7;
+}
+
+    .btn-white:hover {
+        background-color: #f8fafc;
+    }

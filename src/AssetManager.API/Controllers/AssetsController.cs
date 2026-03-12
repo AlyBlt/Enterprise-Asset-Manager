@@ -1,72 +1,74 @@
-﻿using AssetManager.Application.DTOs.Asset;
-using AssetManager.Application.Interfaces.Services;
+﻿using AssetManager.Application.Features.Asset.Commands.AssignAsset;
+using AssetManager.Application.Features.Asset.Commands.CreateAsset;
+using AssetManager.Application.Features.Asset.Commands.DeleteAsset;
+using AssetManager.Application.Features.Asset.Commands.UnassignAsset;
+using AssetManager.Application.Features.Asset.Queries.GetAllAssets;
+using AssetManager.Application.Features.Asset.Queries.GetAssetById;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AssetManager.API.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-[Authorize] //Bu kontrolcüye erişmek için geçerli bir JWT Token şart!
-public class AssetsController(IAssetService assetService) : ControllerBase
+[Authorize]
+public class AssetsController : BaseController
 {
-    // Tüm varlıkları listele (Her kullanıcı görebilir)
+    // Tüm varlıkları listele
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<AssetResponseDto>>> GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var assets = await assetService.GetAllAssetsAsync();
-        return Ok(assets);
+        var result = await Mediator.Send(new GetAllAssetsQuery());
+        return Ok(result);
     }
 
     // ID'ye göre tek bir varlık getir
     [HttpGet("{id}")]
-    public async Task<ActionResult<AssetResponseDto>> GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
-        var asset = await assetService.GetAssetByIdAsync(id);
-        if (asset == null) return NotFound($"ID: {id} asset is not found.");
+        var result = await Mediator.Send(new GetAssetByIdQuery(id));
+        if (result == null) return NotFound($"ID: {id} asset is not found.");
 
-        return Ok(asset);
+        return Ok(result);
     }
 
-    // Yeni varlık ekle (Sadece Admin yetkisi olanlar)
+    // Yeni varlık ekle (Sadece Admin)
     [HttpPost]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> Create([FromBody] CreateAssetRequestDto request)
+    public async Task<IActionResult> Create([FromBody] CreateAssetCommand command)
     {
-        var result = await assetService.CreateAssetAsync(request);
+        var result = await Mediator.Send(command);
         if (!result) return BadRequest("An error occurred while adding the asset.");
 
-        // Profesyonel yaklaşım: 201 Created dönmek
-        return CreatedAtAction(nameof(GetById), new { id = request.SerialNumber }, new { message = "Asset is successfully added." });
+        return Ok(new { message = "Asset is successfully added." });
     }
 
-    
-    // Varlığı sil (Soft Delete - Sadece Admin yetkisi olanlar)
+    // Varlığı sil (Soft Delete - Sadece Admin)
     [HttpDelete("{id}")]
-    [Authorize(Roles = "Admin")] // Sadece Admin rolü silebilir
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(int id)
     {
-        var result = await assetService.DeleteAssetAsync(id);
+        var result = await Mediator.Send(new DeleteAssetCommand(id));
         if (!result) return NotFound($"ID: {id} asset is not found and couldn't be deleted!");
 
         return Ok(new { message = "Asset is successfully deleted (Archived)." });
     }
 
+    // Zimmetle (Sadece Admin)
     [HttpPost("{id}/assign/{userId}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Assign(int id, int userId)
     {
-        var result = await assetService.AssignAssetToUserAsync(id, userId);
+        var result = await Mediator.Send(new AssignAssetCommand(id, userId));
         if (!result) return BadRequest("Asset is not found!");
 
         return Ok(new { message = "Asset is successfully assigned." });
     }
 
+    // Zimmetten Çıkar (Sadece Admin)
     [HttpPost("{id}/unassign")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Unassign(int id)
     {
-        var result = await assetService.UnassignAssetAsync(id);
+        var result = await Mediator.Send(new UnassignAssetCommand(id));
         if (!result) return BadRequest("Asset is not found or not assigned!");
 
         return Ok(new { message = "Asset is unassigned and now in the stock." });

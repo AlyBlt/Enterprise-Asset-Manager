@@ -1,15 +1,12 @@
-﻿using AssetManager.Application.DTOs.AuditLog;
-using AssetManager.Application.Interfaces.Repositories;
+﻿using AssetManager.Application.Interfaces.Repositories;
 using AssetManager.Application.Interfaces.Services;
 using AssetManager.Core.Entities;
-using AutoMapper;
 using Microsoft.AspNetCore.Http;
 
 namespace AssetManager.Application.Services;
 
 public class AuditLogService(
     IAuditLogRepository auditLogRepository,
-    IMapper mapper,
     IHttpContextAccessor httpContextAccessor) : IAuditLogService
 {
     public async Task LogAsync(string action, string entityName, string entityId, string details)
@@ -33,10 +30,5 @@ public class AuditLogService(
         await auditLogRepository.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<AuditLogResponseDto>> GetAllLogsAsync()
-    {
-        var logs = await auditLogRepository.GetAllLogsAsync();
-        // Entity listesini DTO listesine çeviriyoruz
-        return mapper.Map<IEnumerable<AuditLogResponseDto>>(logs);
-    }
+   
 }

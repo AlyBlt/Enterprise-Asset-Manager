@@ -11,7 +11,6 @@ namespace AssetManager.Application.Interfaces.Services
         // Manuel log eklemek için (Örn: "Kullanıcı hatalı şifre girdi")
         Task LogAsync(string action, string entityName, string entityId, string details);
 
-        // Admin panelinde listelemek için
-        Task<IEnumerable<AuditLogResponseDto>> GetAllLogsAsync();
+       
     }
 }

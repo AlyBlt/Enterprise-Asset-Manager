@@ -1,9 +1,8 @@
 ﻿using AssetManager.Application.Interfaces.Repositories;
 using AssetManager.Application.Interfaces.Services;
-using AssetManager.Application.Services;
 using AssetManager.Infrastructure.Data;
 using AssetManager.Infrastructure.Repositories;
-using AssetManager.Infrastructure.Services;
+using AssetManager.Infrastructure.IdentityServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

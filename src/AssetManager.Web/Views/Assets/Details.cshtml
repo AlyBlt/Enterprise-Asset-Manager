@@ -11,9 +11,11 @@
             <h2 class="fw-bold text-dark mb-0">@Model.Name</h2>
             <span class="badge bg-light text-secondary border px-3 mt-2">Serial: @Model.SerialNumber</span>
         </div>
+        <div class="d-flex justify-content-center align-items-center mt-4">
         <a asp-action="Index" class="btn btn-white btn-lg rounded-circle shadow-sm me-3">
-            <i class="bi bi-arrow-left text-success"></i>Back
+                <i class="bi bi-arrow-left text-success"> Back</i>
         </a>
+        </div>
     </div>
 
     <div class="row g-4">
@@ -119,12 +121,15 @@
     </div>
 </div>
 
+@section Styles {
 <style>
-    .timeline-item:last-child {
-        border-start: 0 !important;
-    }
-
     .timeline {
         margin-left: 10px;
     }
+
+        .btn-white {
+            background-color: #fff;
+            border: 1px solid #edf2f7;
+        }
 </style>
+}

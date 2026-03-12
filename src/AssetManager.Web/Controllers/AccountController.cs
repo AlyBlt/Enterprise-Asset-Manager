@@ -1,4 +1,5 @@
-﻿using AssetManager.Application.DTOs.Auth;
+﻿using AssetManager.Application.Features.Auth.Commands.Login;
+using AssetManager.Application.Features.Auth.Commands.Register;
 using AssetManager.Web.Interfaces;
 using AssetManager.Web.Models.Auth;
 using Microsoft.AspNetCore.Authentication;
@@ -19,13 +20,12 @@ public class AccountController(IAuthApiService authApiService) : Controller
         if (!ModelState.IsValid) return View(model);
 
         // ViewModel -> DTO Mapping
-        var loginDto = new LoginRequestDto
-        {
-            Username = model.Username,
-            Password = model.Password
-        };
+        var command = new LoginCommand(
+            model.Username,
+            model.Password
+        );
 
-        var result = await authApiService.LoginAsync(loginDto);
+        var result = await authApiService.LoginAsync(command);
 
         if (result != null && result.IsSuccess)
         {
@@ -61,16 +61,16 @@ public class AccountController(IAuthApiService authApiService) : Controller
         if (!ModelState.IsValid) return View(model);
 
         // ViewModel -> DTO Mapping
-        var registerDto = new RegisterRequestDto
-        {
-            Username = model.Username,
-            FullName = model.FullName,
-            Email = model.Email,
-            Password = model.Password,
-            DepartmentId = model.DepartmentId
-        };
+        var command = new RegisterCommand(
+        
+            model.Username,
+            model.FullName,
+            model.Email,
+            model.Password,
+            model.DepartmentId
+        );
 
-        var result = await authApiService.RegisterAsync(registerDto);
+        var result = await authApiService.RegisterAsync(command);
 
         if (result != null && result.IsSuccess)
         {

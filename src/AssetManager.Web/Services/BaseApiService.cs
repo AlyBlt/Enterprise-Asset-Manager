@@ -14,7 +14,7 @@ public abstract class BaseApiService
     protected void AddAuthorizationHeader()
     {
         // NOT: Dashboard gibi herkese açık veya login sonrası verilerde 
-        // bu metodu servis içindeki istekten hemen önce çağırmayı unutma.
+        // bu metodu servis içindeki istekten hemen önce çağıralım!
         var token = _httpContextAccessor.HttpContext?.User.FindFirst("AccessToken")?.Value;
         if (!string.IsNullOrEmpty(token))
         {

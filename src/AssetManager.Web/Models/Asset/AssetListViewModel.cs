@@ -1,5 +1,5 @@
 ﻿using AssetManager.Application.DTOs.Asset;
-using AssetManager.Core.Enums;
+using AssetManager.Domain.Enums;
 
 namespace AssetManager.Web.Models.Asset;
 

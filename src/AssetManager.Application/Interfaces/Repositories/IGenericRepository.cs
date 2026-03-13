@@ -1,4 +1,4 @@
-﻿using AssetManager.Core.Entities;
+﻿using AssetManager.Domain.Entities;
 using System.Linq.Expressions;
 using System.Text;
 

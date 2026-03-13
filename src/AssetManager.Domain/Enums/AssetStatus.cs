@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AssetManager.Core.Enums
+namespace AssetManager.Domain.Enums
 {
     public enum AssetStatus
     {

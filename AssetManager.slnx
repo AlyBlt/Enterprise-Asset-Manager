@@ -2,8 +2,12 @@
   <Folder Name="/src/">
     <Project Path="src/AssetManager.API/AssetManager.API.csproj" />
     <Project Path="src/AssetManager.Application/AssetManager.Application.csproj" />
-    <Project Path="src/AssetManager.Core/AssetManager.Core.csproj" />
+    <Project Path="src/AssetManager.Domain/AssetManager.Domain.csproj" />
     <Project Path="src/AssetManager.Infrastructure/AssetManager.Infrastructure.csproj" />
     <Project Path="src/AssetManager.Web/AssetManager.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/AssetManager.IntegrationTests/AssetManager.IntegrationTests.csproj" Id="015e96fc-1afa-4026-9703-ade431de33a7" />
+    <Project Path="tests/AssetManager.UnitTests/AssetManager.UnitTests.csproj" Id="f8ddff94-3c0c-4ae6-b858-c4882f584580" />
   </Folder>
 </Solution>

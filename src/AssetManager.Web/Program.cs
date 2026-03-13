@@ -1,8 +1,11 @@
+using AssetManager.Web.Handlers;
 using AssetManager.Web.Interfaces;
 using AssetManager.Web.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddTransient<AuthHeaderHandler>();
 
 // 1. Authentication Yapýlandýrmasý
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -20,12 +23,12 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"] ?? "https://localhost:7111/";
 
 // 3. HttpClient Kayýtlarý
-builder.Services.AddHttpClient<IHomeApiService, HomeApiService>(client => { client.BaseAddress = new Uri(apiBaseUrl); });
-builder.Services.AddHttpClient<IDashboardApiService, DashboardApiService>(client => { client.BaseAddress = new Uri(apiBaseUrl); });
+builder.Services.AddHttpClient<IHomeApiService, HomeApiService>(client => { client.BaseAddress = new Uri(apiBaseUrl); }).AddHttpMessageHandler<AuthHeaderHandler>();
+builder.Services.AddHttpClient<IDashboardApiService, DashboardApiService>(client => { client.BaseAddress = new Uri(apiBaseUrl); }).AddHttpMessageHandler<AuthHeaderHandler>();
 builder.Services.AddHttpClient<IAuthApiService, AuthApiService>(client => { client.BaseAddress = new Uri(apiBaseUrl); });
-builder.Services.AddHttpClient<IAssetApiService, AssetApiService>(client => { client.BaseAddress = new Uri(apiBaseUrl); });
-builder.Services.AddHttpClient<IDepartmentApiService, DepartmentApiService>(client => { client.BaseAddress = new Uri(apiBaseUrl); });
-builder.Services.AddHttpClient<IAdminApiService, AdminApiService>(client => { client.BaseAddress = new Uri(apiBaseUrl); });
+builder.Services.AddHttpClient<IAssetApiService, AssetApiService>(client => { client.BaseAddress = new Uri(apiBaseUrl); }).AddHttpMessageHandler<AuthHeaderHandler>();
+builder.Services.AddHttpClient<IDepartmentApiService, DepartmentApiService>(client => { client.BaseAddress = new Uri(apiBaseUrl); }).AddHttpMessageHandler<AuthHeaderHandler>();
+builder.Services.AddHttpClient<IAdminApiService, AdminApiService>(client => { client.BaseAddress = new Uri(apiBaseUrl); }).AddHttpMessageHandler<AuthHeaderHandler>();
 
 // 4. Diðer Servisler
 builder.Services.AddHttpContextAccessor();

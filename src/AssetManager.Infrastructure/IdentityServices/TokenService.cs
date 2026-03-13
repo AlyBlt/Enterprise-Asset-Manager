@@ -1,5 +1,5 @@
-﻿using AssetManager.Core.Entities;
-using AssetManager.Application.Interfaces.Services;
+﻿using AssetManager.Application.Interfaces.Services;
+using AssetManager.Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

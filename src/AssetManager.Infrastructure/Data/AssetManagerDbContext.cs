@@ -1,4 +1,4 @@
-﻿using AssetManager.Core.Entities;
+﻿using AssetManager.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

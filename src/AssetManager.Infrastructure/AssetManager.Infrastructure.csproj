@@ -19,7 +19,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AssetManager.Application\AssetManager.Application.csproj" />
-    <ProjectReference Include="..\AssetManager.Core\AssetManager.Core.csproj" />
+    <ProjectReference Include="..\AssetManager.Domain\AssetManager.Domain.csproj" />
   </ItemGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="AssetManager.IntegrationTests" />
+	</ItemGroup>
 
 </Project>

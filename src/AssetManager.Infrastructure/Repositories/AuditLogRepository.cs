@@ -1,5 +1,5 @@
 ﻿using AssetManager.Application.Interfaces.Repositories;
-using AssetManager.Core.Entities;
+using AssetManager.Domain.Entities;
 using AssetManager.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 

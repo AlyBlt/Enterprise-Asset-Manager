@@ -1,7 +1,7 @@
 ﻿using AssetManager.Application.Interfaces.Repositories;
 using AssetManager.Application.Interfaces.Services;
-using AssetManager.Core.Entities;
-using AssetManager.Core.Enums;
+using AssetManager.Domain.Entities;
+using AssetManager.Domain.Enums;
 using AutoMapper;
 using MediatR;
 

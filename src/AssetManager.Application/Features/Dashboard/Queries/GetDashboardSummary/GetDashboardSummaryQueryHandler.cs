@@ -1,6 +1,6 @@
 ﻿using AssetManager.Application.DTOs.Dashboard;
 using AssetManager.Application.Interfaces.Repositories;
-using AssetManager.Core.Enums;
+using AssetManager.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 

@@ -1,6 +1,6 @@
 ﻿using AssetManager.Application.Interfaces.Repositories;
 using AssetManager.Application.Interfaces.Services;
-using AssetManager.Core.Entities;
+using AssetManager.Domain.Entities;
 using AutoMapper;
 using MediatR;
 

@@ -1,6 +1,4 @@
-﻿using AssetManager.Core.Entities;
-using AssetManager.Core.Enums;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -8,6 +6,8 @@ using System.Text;
 using Microsoft.EntityFrameworkCore; 
 using System.Threading;
 using System.Threading.Tasks;
+using AssetManager.Domain.Entities;
+using AssetManager.Domain.Enums;
 
 namespace AssetManager.Infrastructure.Data
 {
@@ -19,7 +19,16 @@ namespace AssetManager.Infrastructure.Data
             var context = scope.ServiceProvider.GetRequiredService<AssetManagerDbContext>();
 
             // 1. Veritabanını oluştur/güncelle
-            await context.Database.MigrateAsync(cancellationToken);
+            // SADECE ilişkisel bir DB (SQL Server gibi) kullanılıyorsa migration yap
+            if (context.Database.IsRelational())
+            {
+                await context.Database.MigrateAsync(cancellationToken);
+            }
+            else
+            {
+                // InMemory veya Relational olmayan DB'lerde sadece şemayı oluştur
+                await context.Database.EnsureCreatedAsync(cancellationToken);
+            }
 
             // 2. Departmanları Hazırla (Eksikse ekle, varsa çek)
             if (!await context.Departments.AnyAsync(cancellationToken))

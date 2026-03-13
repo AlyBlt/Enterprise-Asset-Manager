@@ -1,6 +1,6 @@
 ﻿using AssetManager.Application.Interfaces.Repositories;
 using AssetManager.Application.Interfaces.Services;
-using AssetManager.Core.Enums;
+using AssetManager.Domain.Enums;
 using MediatR;
 using System;
 using System.Collections.Generic;

@@ -1,9 +1,9 @@
-﻿using AssetManager.Core.Enums;
+﻿using AssetManager.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AssetManager.Core.Entities
+namespace AssetManager.Domain.Entities
 {
     public class AppUserEntity : BaseEntity
     {

@@ -1,12 +1,11 @@
 ﻿using AssetManager.Application.DTOs.Asset;
 using AssetManager.Application.DTOs.AuditLog;
-using AssetManager.Application.DTOs.Auth;
 using AssetManager.Application.DTOs.Department;
 using AssetManager.Application.DTOs.User;
 using AssetManager.Application.Features.Asset.Commands.CreateAsset;
 using AssetManager.Application.Features.Auth.Commands.Register;
 using AssetManager.Application.Features.Department.Commands.CreateDepartment;
-using AssetManager.Core.Entities;
+using AssetManager.Domain.Entities;
 using AutoMapper;
 
 namespace AssetManager.Application.Mappings;

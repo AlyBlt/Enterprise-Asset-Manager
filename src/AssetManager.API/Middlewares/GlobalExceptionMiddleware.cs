@@ -50,7 +50,7 @@ public class GlobalExceptionMiddleware(RequestDelegate next, ILogger<GlobalExcep
             {
                 StatusCode = statusCode,
                 Message = "An internal server error occurred.",
-                Detail = exception.Message // Production'da bunu gizlemek isteyebilirsin
+                Detail = "An unexpected error occurred." 
             };
         }
 

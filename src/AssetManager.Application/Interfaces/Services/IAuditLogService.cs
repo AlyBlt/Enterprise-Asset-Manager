@@ -1,5 +1,4 @@
 ﻿using AssetManager.Application.DTOs.AuditLog;
-using AssetManager.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;

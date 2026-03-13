@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AssetManager.Core.Entities
+namespace AssetManager.Domain.Entities
 {
     public abstract class BaseEntity
     {

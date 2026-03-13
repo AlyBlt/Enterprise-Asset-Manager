@@ -20,8 +20,11 @@ namespace AssetManager.Application
             // 2. MediatR Ayarı (Tüm Handler'ları otomatik bulur)
             services.AddMediatR(cfg => {
                 cfg.RegisterServicesFromAssembly(assembly);
-                // Yazdığımız ValidationBehavior'ı araya sokuyoruz
+
+                // Behaviorları araya sokuyoruz
+                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceBehavior<,>));
             });
             // 3. FluentValidation Ayarı (Tüm Validator'ları otomatik bulur)
             services.AddValidatorsFromAssembly(assembly);

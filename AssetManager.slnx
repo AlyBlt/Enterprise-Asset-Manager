@@ -1,4 +1,12 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".dockerignore" />
+    <File Path=".env" />
+    <File Path=".env.example" />
+    <File Path="compose.yml" />
+    <File Path="Dockerfile" />
+    <File Path="nginx/default.conf" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/AssetManager.API/AssetManager.API.csproj" />
     <Project Path="src/AssetManager.Application/AssetManager.Application.csproj" />

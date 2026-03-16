@@ -10,7 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 
-var keyString = jwtSettings["Key"];
+// önce environment variable kontrol edilir
+var keyString = builder.Configuration["Jwt:Key"] ??
+                 builder.Configuration["JWT_KEY"] ??
+                 jwtSettings["Key"];
 if (string.IsNullOrEmpty(keyString))
     throw new Exception("JWT Key not found in configuration");
 
@@ -42,6 +45,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
 builder.Services.AddControllers();
+builder.Services.AddHealthChecks();
 builder.Services.AddHttpContextAccessor();
 
 // Swagger
@@ -89,9 +93,8 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseHttpsRedirection();
 }
-
-app.UseHttpsRedirection();
 
 app.UseRouting();
 
@@ -99,6 +102,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
 
 app.Run();
 

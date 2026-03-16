@@ -1,0 +1,89 @@
+name: asset-manager-project 
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: assetmanager-db
+    user: root
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD} # .env'den gelecek
+      - MSSQL_PID=Developer
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P '${MSSQL_SA_PASSWORD}' -C -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - assetmanager-network
+    volumes:
+      - mssql_data:/var/opt/mssql
+
+  api:
+    build:
+      context: .
+      target: runtime-api
+    container_name: assetmanager-api
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      STUDENT_NAME: ${STUDENT_NAME}
+      JWT_KEY: ${JWT_KEY}
+      Jwt__Key: ${JWT_KEY}
+      Jwt__Issuer: ${JWT_ISSUER}
+      Jwt__Audience: ${JWT_AUDIENCE}
+      Jwt__DurationInMinutes: ${JWT_DURATION}
+      APP_PORT: ${APP_PORT}
+      ConnectionStrings__DefaultConnection: "Server=db;Database=AssetManager;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True"
+    networks:
+      - assetmanager-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build:
+      context: .
+      target: runtime-web
+    container_name: assetmanager-web
+    restart: always
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      STUDENT_NAME: ${STUDENT_NAME}
+      ApiSettings__BaseUrl: "http://api:8080/"
+      ASPNETCORE_URLS: "http://+:5000"
+    networks:
+      - assetmanager-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:5000/"] 
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  nginx:
+    image: nginx:alpine
+    container_name: assetmanager-nginx
+    restart: always
+    ports:
+      - "${APP_PORT}:80" # Sunucuda verilen port
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      api:
+        condition: service_healthy
+      web:
+        condition: service_healthy
+    networks:
+      - assetmanager-network
+
+networks:
+  assetmanager-network:
+    driver: bridge
+
+volumes:
+  mssql_data:

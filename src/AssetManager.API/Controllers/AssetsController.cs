@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace AssetManager.API.Controllers;
 
 [Authorize]
+[Route("api/assets")]
 public class AssetsController : BaseController
 {
     // Tüm varlıkları listele

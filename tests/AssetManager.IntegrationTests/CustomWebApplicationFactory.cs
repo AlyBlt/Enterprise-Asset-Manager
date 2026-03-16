@@ -6,9 +6,10 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite; 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using System.Data.Common;
+using System.Security.Cryptography;
 
 namespace AssetManager.IntegrationTests;
 
@@ -16,6 +17,17 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        // Rastgele key üretimi
+        var randomTestKey = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
+
+        // DİKKAT: builder.UseSetting kullanarak konfigürasyonu enjekte ediyoruz
+        // Bu metot, Program.cs içindeki builder.Configuration tarafından İLK SIRADA okunur.
+        builder.UseSetting("JWT_KEY", randomTestKey);
+        builder.UseSetting("Jwt:Key", randomTestKey);
+        builder.UseSetting("Jwt:Issuer", "AssetManagerTest");
+        builder.UseSetting("Jwt:Audience", "AssetManagerTestUsers");
+
+        // 2. SERVİSLERİ YAPILANDIR (SQLite kısmı)
         builder.ConfigureServices(services =>
         {
             // 1. DbContext ve EF ile ilgili HER ŞEYİ (Internal Provider dahil) kökten kazı

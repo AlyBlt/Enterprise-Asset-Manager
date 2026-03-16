@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace AssetManager.API.Controllers;
 
 [Authorize]
+[Route("api/departments")]
 public class DepartmentsController : BaseController
 {
     // Tüm departmanları listele

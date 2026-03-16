@@ -7,5 +7,5 @@ namespace AssetManager.API.Controllers;
 public class HealthController : ControllerBase
 {
     [HttpGet]
-    public IActionResult Get() => Ok(); // 200 OK döner
+    public IActionResult Get() => Ok("Healthy"); // 200 OK döner
 }

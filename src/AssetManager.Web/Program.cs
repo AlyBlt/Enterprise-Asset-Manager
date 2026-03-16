@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.HttpOverrides;
 using AssetManager.Web.Handlers;
 using AssetManager.Web.Interfaces;
 using AssetManager.Web.Services;
@@ -20,7 +21,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 
 // 2. API URL Ayarýný Al
-var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"] ?? "https://localhost:7111/";
+var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"] ?? "http://api:8080/";
+
+
 
 // 3. HttpClient Kayýtlarý
 builder.Services.AddHttpClient<IHomeApiService, HomeApiService>(client => { client.BaseAddress = new Uri(apiBaseUrl); }).AddHttpMessageHandler<AuthHeaderHandler>();
@@ -37,6 +40,11 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
+
 // Middleware Pipeline
 if (!app.Environment.IsDevelopment())
 {
@@ -44,7 +52,10 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+if (app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();

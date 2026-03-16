@@ -2,6 +2,7 @@
 using AssetManager.Application.Features.Asset.Commands.CreateAsset;
 using AssetManager.Application.Features.Asset.Commands.DeleteAsset;
 using AssetManager.Application.Features.Asset.Commands.UnassignAsset;
+using AssetManager.Application.Features.Asset.Commands.UpdateAsset;
 using AssetManager.Application.Features.Asset.Queries.GetAllAssets;
 using AssetManager.Application.Features.Asset.Queries.GetAssetById;
 using Microsoft.AspNetCore.Authorization;
@@ -73,5 +74,18 @@ public class AssetsController : BaseController
         if (!result) return BadRequest("Asset is not found or not assigned!");
 
         return Ok(new { message = "Asset is unassigned and now in the stock." });
+    }
+
+    // Varlık Güncelle (Sadece Admin veya Editor)
+    [HttpPut("{id}")]
+    [Authorize(Roles = "Admin,Editor")]
+    public async Task<IActionResult> Update(int id, [FromBody] UpdateAssetCommand command)
+    {
+        if (id != command.Id) return BadRequest("ID mismatch!");
+
+        var result = await Mediator.Send(command);
+        if (!result) return NotFound($"ID: {id} asset is not found.");
+
+        return Ok(new { message = "Asset is successfully updated." });
     }
 }

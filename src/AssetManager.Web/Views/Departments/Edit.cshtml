@@ -1,0 +1,118 @@
+﻿@model AssetManager.Web.Models.Department.DepartmentUpdateViewModel
+
+@{
+    ViewData["Title"] = "Update Department";
+}
+
+<div class="container py-5 animate__animated animate__fadeIn">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            @* Başlık Bölümü *@
+            <div class="d-flex align-items-center mb-4">
+                <a asp-action="Index" class="btn btn-light rounded-circle me-3 shadow-sm">
+                    <i class="bi bi-arrow-left text-success"></i>
+                </a>
+                <div>
+                    <h2 class="fw-bold text-dark mb-1">
+                        <i class="bi bi-pencil-square text-success me-2"></i>Update Department
+                    </h2>
+                    <p class="text-muted small mb-0">Modify organizational unit details and descriptions.</p>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <form asp-action="Edit" method="post">
+                    @* Doğrulama Özeti *@
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger mx-4 mt-4 rounded-3 small"></div>
+
+                    @* Gizli ID Alanı *@
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="card-body p-4 p-md-5">
+                        <div class="row g-4">
+                            @* Departman Adı *@
+                            <div class="col-12">
+                                <label asp-for="Name" class="form-label small fw-bold text-uppercase text-muted">Department Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0">
+                                        <i class="bi bi-building text-success"></i>
+                                    </span>
+                                    <input asp-for="Name" class="form-control bg-light border-0 rounded-end-3 shadow-none"
+                                           placeholder="e.g. Information Technology" />
+                                </div>
+                                <span asp-validation-for="Name" class="text-danger small"></span>
+                            </div>
+
+                            @* Departman Açıklaması *@
+                            <div class="col-12">
+                                <label asp-for="Description" class="form-label small fw-bold text-uppercase text-muted">Description</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0 align-items-start pt-2">
+                                        <i class="bi bi-card-text text-success"></i>
+                                    </span>
+                                    <textarea asp-for="Description" class="form-control bg-light border-0 rounded-end-3 shadow-none"
+                                              rows="4" placeholder="Enter department purpose and scope..."></textarea>
+                                </div>
+                                <span asp-validation-for="Description" class="text-danger small"></span>
+                            </div>
+
+                            @* Bilgilendirme Kutusu (Opsiyonel ama tutarlılık sağlar) *@
+                            <div class="col-12 mt-4">
+                                <div class="p-3 rounded-4 border border-success border-opacity-10 bg-success bg-opacity-10">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-info-circle-fill text-success me-3 fs-5"></i>
+                                        <div class="small">
+                                            Updating the department name will be reflected across all assigned personnel and assets immediately.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @* Alt Butonlar *@
+                    <div class="card-footer bg-light border-0 p-4 d-flex justify-content-end gap-2">
+                        <a asp-action="Index" class="btn btn-light px-5 rounded-pill fw-semibold">Cancel</a>
+                        <button type="submit" class="btn btn-success rounded-pill px-5 shadow-sm">
+                            <i class="bi bi-check-lg me-2"></i>Update Department
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+@section Styles {
+    <style>
+        .input-group-text {
+            border-top-left-radius: 0.75rem !important;
+            border-bottom-left-radius: 0.75rem !important;
+            min-width: 45px;
+            justify-content: center;
+        }
+
+        .form-control {
+            font-size: 0.95rem;
+            padding-top: 0.6rem;
+            padding-bottom: 0.6rem;
+        }
+
+            .form-control:focus {
+                background-color: #fff !important;
+                border: 1px solid #198754 !important;
+                box-shadow: 0 0 0 0.25 rbg(25, 135, 84, 0.1) !important;
+            }
+
+        textarea.form-control {
+            border-top-right-radius: 0.75rem !important;
+            border-bottom-right-radius: 0.75rem !important;
+        }
+    </style>
+}

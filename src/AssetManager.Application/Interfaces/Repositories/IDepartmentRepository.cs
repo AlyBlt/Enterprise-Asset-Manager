@@ -8,5 +8,6 @@ namespace AssetManager.Application.Interfaces.Repositories
     public interface IDepartmentRepository : IGenericRepository<DepartmentEntity>
     {
         Task<IEnumerable<DepartmentEntity>> GetAllWithUsersAsync();
+        Task<DepartmentEntity?> GetByIdWithUsersAsync(int id);
     }
 }

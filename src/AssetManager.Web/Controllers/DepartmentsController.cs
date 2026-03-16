@@ -1,4 +1,5 @@
 ﻿using AssetManager.Application.Features.Department.Commands.CreateDepartment;
+using AssetManager.Application.Features.Department.Commands.UpdateDepartment;
 using AssetManager.Web.Interfaces;
 using AssetManager.Web.Models.Department;
 using Microsoft.AspNetCore.Authorization;
@@ -46,8 +47,7 @@ public class DepartmentsController(IDepartmentApiService departmentApiService) :
 
     public async Task<IActionResult> Details(int id)
     {
-        var departments = await departmentApiService.GetAllAsync();
-        var department = departments.FirstOrDefault(d => d.Id == id);
+        var department = await departmentApiService.GetByIdAsync(id);
 
         if (department == null) return NotFound();
 
@@ -60,5 +60,41 @@ public class DepartmentsController(IDepartmentApiService departmentApiService) :
         };
 
         return View(viewModel);
+    }
+
+    [HttpGet]
+    [Authorize(Roles = "Admin, Editor")]
+    public async Task<IActionResult> Edit(int id)
+    {
+        // API'den tekil departmanı çekiyoruz
+        var department = await departmentApiService.GetByIdAsync(id);
+
+        if (department == null) return NotFound();
+
+        var model = new DepartmentUpdateViewModel
+        {
+            Id = department.Id,
+            Name = department.Name,
+            Description = department.Description
+        };
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "Admin, Editor")]
+    public async Task<IActionResult> Edit(DepartmentUpdateViewModel model)
+    {
+        if (!ModelState.IsValid) return View(model);
+
+        // ViewModel'den Command'e map ediyoruz
+        var command = new UpdateDepartmentCommand(model.Id, model.Name, model.Description);
+
+        var result = await departmentApiService.UpdateAsync(command);
+
+        if (result) return RedirectToAction(nameof(Index));
+
+        ModelState.AddModelError("", "An error occurred while updating the department.");
+        return View(model);
     }
 }

@@ -46,4 +46,21 @@ public class AdminApiService(HttpClient httpClient, IHttpContextAccessor httpCon
             ? await response.Content.ReadFromJsonAsync<IEnumerable<AuditLogResponseDto>>() ?? []
             : [];
     }
+
+    public async Task<bool> UpdateUserPermissionsAsync(int userId, string newRole, int? departmentId)
+    {
+        AddAuthorizationHeader();
+
+        // API'nin beklediği formata göre bir body oluşturuyoruz
+        var updateModel = new
+        {
+            UserId = userId,
+            NewRole = newRole,
+            DepartmentId = departmentId
+        };
+      
+        var response = await _httpClient.PutAsJsonAsync($"api/admin/users/{userId}/access", updateModel);
+
+        return response.IsSuccessStatusCode;
+    }
 }

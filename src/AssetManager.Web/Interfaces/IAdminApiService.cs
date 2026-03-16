@@ -9,5 +9,6 @@ namespace AssetManager.Web.Interfaces
         Task<(bool IsSuccess, string? Message)> ChangeUserRoleAsync(int userId, string newRole);
         Task<bool> DeleteUserAsync(int userId);
         Task<IEnumerable<AuditLogResponseDto>> GetAllLogsAsync();
+        Task<bool> UpdateUserPermissionsAsync(int userId, string newRole, int? departmentId);
     }
 }

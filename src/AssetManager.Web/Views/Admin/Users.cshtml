@@ -70,7 +70,7 @@
                                     <button class="btn btn-light btn-sm rounded-circle shadow-sm me-2"
                                             data-bs-toggle="modal"
                                             data-bs-target="#roleModal-@user.Id"
-                                            title="Change Role">
+                                            title="Change Role & Department">
                                         <i class="bi bi-shield-lock text-primary"></i>
                                     </button>
                                     <button class="btn btn-light btn-sm rounded-circle shadow-sm"
@@ -80,22 +80,58 @@
                                     </button>
                                 </div>
 
+                                @* Role & Department Modal *@
                                 <div class="modal fade" id="roleModal-@user.Id" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog modal-sm modal-dialog-centered">
-                                        <div class="modal-content border-0 shadow rounded-4 text-start">
-                                            <form asp-action="ChangeRole" method="post">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content border-0 shadow-lg rounded-4">
+                                            <div class="modal-header border-0 pb-0 pt-4 px-4">
+                                                <h5 class="fw-bold mb-0">Update Personnel: @user.FullName</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <form asp-action="UpdateUserAccess" method="post">
+                                                @* Action adını güncelledik *@
                                                 <input type="hidden" name="userId" value="@user.Id" />
+
                                                 <div class="modal-body p-4">
-                                                    <h6 class="fw-bold mb-3">Update Role for @user.Username</h6>
-                                                    <select name="newRole" class="form-select rounded-3">
-                                                        <option value="3" selected="@(user.Role == "Guest")">Guest</option>
-                                                        <option value="2" selected="@(user.Role == "Editor")">Editor</option>
-                                                        <option value="1" selected="@(user.Role == "Admin")">Admin</option>
-                                                    </select>
+                                                    @* Departman Seçimi *@
+                                                    <div class="mb-3">
+                                                        <label class="form-label small fw-bold text-muted text-uppercase">Organizational Unit (Department)</label>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text bg-light border-0"><i class="bi bi-building text-success"></i></span>
+                                                            <select name="departmentId" class="form-select bg-light border-0 shadow-none">
+                                                                <option value="">-- No Department --</option>
+                                                                @foreach (var dept in Model.Departments)
+                                                                {
+                                                                    <option value="@dept.Id" selected="@(user.DepartmentId == dept.Id)">
+                                                                        @dept.Name
+                                                                    </option>
+                                                                }
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    @* Rol Seçimi *@
+                                                    <div class="mb-2">
+                                                        <label class="form-label small fw-bold text-muted text-uppercase">Security Role</label>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text bg-light border-0"><i class="bi bi-shield-lock text-success"></i></span>
+                                                            <select name="newRole" class="form-select bg-light border-0 shadow-none">
+                                                                <option value="Guest" selected="@(user.Role == "Guest")">Guest (View Only)</option>
+                                                                <option value="Editor" selected="@(user.Role == "Editor")">Editor (Manage Assets)</option>
+                                                                <option value="Admin" selected="@(user.Role == "Admin")">Admin (System Manager)</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <p class="text-muted mt-3 mb-0" style="font-size: 0.75rem;">
+                                                        <i class="bi bi-info-circle me-1"></i> Changes will take effect on the user's next action or login.
+                                                    </p>
                                                 </div>
-                                                <div class="modal-footer border-0 p-4 pt-0">
-                                                    <button type="button" class="btn btn-light rounded-pill px-3" data-bs-dismiss="modal">Cancel</button>
-                                                    <button type="submit" class="btn btn-success rounded-pill px-4">Save</button>
+
+                                                <div class="modal-footer border-0 p-4 pt-0 d-grid gap-2">
+                                                    <button type="submit" class="btn btn-success rounded-pill py-2 shadow-sm">
+                                                        <i class="bi bi-cloud-upload me-2"></i>Save Management Changes
+                                                    </button>
+                                                    <button type="button" class="btn btn-light rounded-pill py-2" data-bs-dismiss="modal">Cancel</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -119,9 +155,9 @@
                 text: `You are about to delete user "${name}". This action is reversible via database but will revoke access!`,
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#10b981',
-                cancelButtonColor: '#ef4444',
-                confirmButtonText: 'Delete!',
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#10b981',
+                confirmButtonText: 'Delete',
                 border: 'none',
                 borderRadius: '15px'
             }).then((result) => {

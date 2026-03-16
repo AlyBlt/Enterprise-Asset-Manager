@@ -66,6 +66,12 @@
                                         <a asp-action="Details" asp-route-id="@asset.Id" class="btn btn-white btn-sm px-3 border-end" title="View Details">
                                             <i class="bi bi-eye text-primary"></i>
                                         </a>
+                                        @if (User.IsInRole("Admin") || User.IsInRole("Editor"))
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@asset.Id" class="btn btn-white btn-sm px-3 border-end" title="Update Asset">
+                                                <i class="bi bi-pencil-square text-warning"></i>
+                                            </a>
+                                        }
                                         @if (User.IsInRole("Admin"))
                                         {
                                             <button type="button" class="btn btn-white btn-sm px-3" title="Delete"

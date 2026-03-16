@@ -1,5 +1,6 @@
 ﻿using AssetManager.Application.Features.AuditLog.Queries.GetAllAuditLogs;
 using AssetManager.Application.Features.User.Commands.DeleteUser;
+using AssetManager.Application.Features.User.Commands.UpdateUserAccess;
 using AssetManager.Application.Features.User.Commands.UpdateUserRole;
 using AssetManager.Application.Features.User.Queries.GetAllUsers;
 using Microsoft.AspNetCore.Authorization;
@@ -44,5 +45,15 @@ public class AdminController : BaseController
     {
         var logs = await Mediator.Send(new GetAllAuditLogsQuery());
         return Ok(logs);
+    }
+
+    [HttpPut("users/{id}/access")]
+    public async Task<IActionResult> UpdateUserAccess(int id, [FromBody] UpdateUserAccessCommand request)
+    {
+        if (id != request.UserId) return BadRequest("ID mismatch");
+
+        var result = await Mediator.Send(request);
+
+        return result ? Ok(new { Message = "Access updated." }) : BadRequest("Update failed.");
     }
 }

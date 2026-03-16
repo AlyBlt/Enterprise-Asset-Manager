@@ -62,13 +62,12 @@ public class AccountController(IAuthApiService authApiService) : Controller
 
         // ViewModel -> DTO Mapping
         var command = new RegisterCommand(
-        
             model.Username,
-            model.FullName,
-            model.Email,
-            model.Password,
+            model.Email,      // Email 2. sıraya geldi
+            model.Password,   // Password 3. sıraya geldi
+            model.FullName,   // FullName 4. sıraya geldi
             model.DepartmentId
-        );
+         );
 
         var result = await authApiService.RegisterAsync(command);
 

@@ -59,7 +59,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             // 5. Şemayı oluştur ve Seed Datayı elle tetikle
             var sp = services.BuildServiceProvider();
             using var scope = sp.CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<AssetManagerDbContext>();
+            var db = scope.ServiceProvider.GetRequiredService<AssetManagerDbContext>()!;
 
             // SQLite 'Relational' olduğu için burada asla hata almazsın
             db.Database.EnsureCreated();

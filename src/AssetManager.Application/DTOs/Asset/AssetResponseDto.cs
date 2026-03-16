@@ -14,6 +14,7 @@ namespace AssetManager.Application.DTOs.Asset
         public string Category { get; set; } = string.Empty;
         public AssetStatus Status { get; set; }
         public string? AssignedUserName { get; set; }
+        public int? AssignedUserId { get; set; }
         public string SerialNumber { get; set; } = string.Empty;
     }
 }

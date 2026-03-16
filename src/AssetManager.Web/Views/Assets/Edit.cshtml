@@ -1,0 +1,138 @@
+﻿@using AssetManager.Domain.Enums
+@using System.Globalization
+@model AssetManager.Web.Models.Asset.AssetUpdateViewModel
+
+@{
+    ViewData["Title"] = "Update Asset";
+}
+
+<div class="container py-5 animate__animated animate__fadeIn">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="d-flex align-items-center mb-4">
+                <a asp-action="Index" class="btn btn-light rounded-circle me-3 shadow-sm"> 
+                    <i class="bi bi-arrow-left text-success"></i>
+                </a>
+                <div>
+                    <h2 class="fw-bold text-dark mb-1">
+                        <i class="bi bi-pencil-square text-success me-2"></i>Update Asset
+                    </h2>
+                    <p class="text-muted small mb-0">Modify asset details and manage personnel assignment.</p>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <form asp-action="Edit" method="post">
+                    @* Validation Summary *@
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger mx-4 mt-4 rounded-3 small"></div>
+
+                    @* Hidden ID Field *@
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="card-body p-4 p-md-5">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label asp-for="Name" class="form-label small fw-bold text-uppercase text-muted">Asset Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0"><i class="bi bi-tag text-success"></i></span>
+                                    <input asp-for="Name" class="form-control bg-light border-0 rounded-end-3 shadow-none" placeholder="e.g. MacBook Pro 16\" />
+                                </div>
+                                <span asp-validation-for="Name" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="SerialNumber" class="form-label small fw-bold text-uppercase text-muted">Serial Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0"><i class="bi bi-hash text-success"></i></span>
+                                    <input asp-for="SerialNumber" class="form-control bg-light border-0 rounded-end-3 shadow-none" placeholder="SN-XXXX-XXXX" />
+                                </div>
+                                <span asp-validation-for="SerialNumber" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Category" class="form-label small fw-bold text-uppercase text-muted">Category</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0"><i class="bi bi-grid text-success"></i></span>
+                                    <input asp-for="Category" class="form-control bg-light border-0 rounded-end-3 shadow-none" />
+                                </div>
+                                <span asp-validation-for="Category" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Price" class="form-label small fw-bold text-uppercase text-muted">Purchase Price</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0"><i class="bi bi-currency-dollar text-success"></i></span>
+                                    <input asp-for="Price" type="text" value="@Model.Price.ToString("0.00", CultureInfo.InvariantCulture)"
+                                    class="form-control bg-light border-0 rounded-end-3 shadow-none" />
+                                </div>
+                                <span asp-validation-for="Price" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="Description" class="form-label small fw-bold text-uppercase text-muted">Description</label>
+                                <textarea asp-for="Description" class="form-control bg-light border-0 rounded-3 shadow-none" rows="3" placeholder="Enter asset details..."></textarea>
+                                <span asp-validation-for="Description" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-12 mt-5">
+                                <div class="p-4 rounded-4 border border-success border-opacity-25 bg-success bg-opacity-10">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="bg-success text-white rounded-circle p-2 me-3 d-flex shadow-sm">
+                                            <i class="bi bi-person-plus-fill"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="fw-bold mb-0">Assignment Management</h6>
+                                            <p class="text-muted small mb-0">Assign this asset to a staff member or release it.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-8 col-lg-6">
+                                        <label class="form-label small fw-bold text-success">Select Personnel</label>
+                                        <select asp-for="AssignedUserId" class="form-select border-0 shadow-sm rounded-3 py-2"
+                                                asp-items="@(IEnumerable<SelectListItem>)ViewBag.UserList">
+                                            <option value="">-- No Assignment (Mark as Available) --</option>
+                                        </select>
+                                        <div class="form-text small mt-2">
+                                            <i class="bi bi-info-circle me-1"></i> If you select a user, the asset status will be set to <strong>Assigned</strong>.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer bg-light border-0 p-4 d-flex justify-content-end gap-2">
+                        <a asp-action="Index" class="btn btn-light px-5 rounded-pill fw-semibold">Cancel</a>
+                        <button type="submit" class="btn btn-success rounded-pill px-5 shadow-sm">
+                            <i class="bi bi-check-lg me-2"></i>Update Asset
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+@section Styles {
+    <style>
+        .input-group-text {
+            border-top-left-radius: 0.75rem !important;
+            border-bottom-left-radius: 0.75rem !important;
+        }
+
+        .form-control, .form-select {
+            font-size: 0.95rem;
+        }
+
+            .form-control:focus, .form-select:focus {
+                background-color: #fff !important;
+                border: 1px solid #198754 !important;
+            }
+    </style>
+}

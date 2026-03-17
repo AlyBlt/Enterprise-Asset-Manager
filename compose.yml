@@ -31,13 +31,12 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       STUDENT_NAME: ${STUDENT_NAME}
-      JWT_KEY: ${JWT_KEY}
-      Jwt__Key: ${JWT_KEY}
-      Jwt__Issuer: ${JWT_ISSUER}
-      Jwt__Audience: ${JWT_AUDIENCE}
-      Jwt__DurationInMinutes: ${JWT_DURATION}
+      Jwt__Key: ${Jwt__Key}
+      Jwt__Issuer: ${Jwt__Issuer}
+      Jwt__Audience: ${Jwt__Audience}
+      Jwt__DurationInMinutes: ${Jwt__DurationInMinutes}
       APP_PORT: ${APP_PORT}
-      ConnectionStrings__DefaultConnection: "Server=db;Database=AssetManager;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True"
+      ConnectionStrings__DefaultConnection: ${ConnectionStrings__DefaultConnection}
     networks:
       - assetmanager-network
     healthcheck:

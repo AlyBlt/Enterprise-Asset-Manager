@@ -11,9 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 
 // önce environment variable kontrol edilir
-var keyString = builder.Configuration["Jwt:Key"] ??
-                 builder.Configuration["JWT_KEY"] ??
-                 jwtSettings["Key"];
+var keyString = builder.Configuration["Jwt:Key"];
 if (string.IsNullOrEmpty(keyString))
     throw new Exception("JWT Key not found in configuration");
 
@@ -60,7 +58,7 @@ builder.Services.AddSwaggerGen(c =>
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "Bearer token giriniz",
+        Description = "Enter Bearer token",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,

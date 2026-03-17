@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AssetManager.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class FixDepartmentUniqueIndex : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

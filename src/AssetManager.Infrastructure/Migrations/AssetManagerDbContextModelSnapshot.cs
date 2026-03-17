@@ -22,7 +22,7 @@ namespace AssetManager.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("AssetManager.Core.Entities.AppUserEntity", b =>
+            modelBuilder.Entity("AssetManager.Domain.Entities.AppUserEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -87,7 +87,7 @@ namespace AssetManager.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("AssetManager.Core.Entities.AssetEntity", b =>
+            modelBuilder.Entity("AssetManager.Domain.Entities.AssetEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -152,7 +152,7 @@ namespace AssetManager.Infrastructure.Migrations
                     b.ToTable("Assets");
                 });
 
-            modelBuilder.Entity("AssetManager.Core.Entities.AuditLogEntity", b =>
+            modelBuilder.Entity("AssetManager.Domain.Entities.AuditLogEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -201,7 +201,7 @@ namespace AssetManager.Infrastructure.Migrations
                     b.ToTable("AuditLogs");
                 });
 
-            modelBuilder.Entity("AssetManager.Core.Entities.DepartmentEntity", b =>
+            modelBuilder.Entity("AssetManager.Domain.Entities.DepartmentEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -241,9 +241,9 @@ namespace AssetManager.Infrastructure.Migrations
                     b.ToTable("Departments");
                 });
 
-            modelBuilder.Entity("AssetManager.Core.Entities.AppUserEntity", b =>
+            modelBuilder.Entity("AssetManager.Domain.Entities.AppUserEntity", b =>
                 {
-                    b.HasOne("AssetManager.Core.Entities.DepartmentEntity", "Department")
+                    b.HasOne("AssetManager.Domain.Entities.DepartmentEntity", "Department")
                         .WithMany("Users")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -251,9 +251,9 @@ namespace AssetManager.Infrastructure.Migrations
                     b.Navigation("Department");
                 });
 
-            modelBuilder.Entity("AssetManager.Core.Entities.AssetEntity", b =>
+            modelBuilder.Entity("AssetManager.Domain.Entities.AssetEntity", b =>
                 {
-                    b.HasOne("AssetManager.Core.Entities.AppUserEntity", "AssignedUser")
+                    b.HasOne("AssetManager.Domain.Entities.AppUserEntity", "AssignedUser")
                         .WithMany()
                         .HasForeignKey("AssignedUserId")
                         .OnDelete(DeleteBehavior.SetNull);
@@ -261,7 +261,7 @@ namespace AssetManager.Infrastructure.Migrations
                     b.Navigation("AssignedUser");
                 });
 
-            modelBuilder.Entity("AssetManager.Core.Entities.DepartmentEntity", b =>
+            modelBuilder.Entity("AssetManager.Domain.Entities.DepartmentEntity", b =>
                 {
                     b.Navigation("Users");
                 });

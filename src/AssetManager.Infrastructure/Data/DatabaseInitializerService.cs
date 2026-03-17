@@ -11,24 +11,37 @@ using AssetManager.Domain.Enums;
 
 namespace AssetManager.Infrastructure.Data
 {
-    internal class DatabaseInitializerService(IServiceProvider serviceProvider) : IHostedService
+    internal class DatabaseInitializerService : IHostedService
     {
+        private readonly IServiceProvider _serviceProvider;
+        private readonly IHostEnvironment _env;
+
+        public DatabaseInitializerService(IServiceProvider serviceProvider, IHostEnvironment env)
+        {
+            _serviceProvider = serviceProvider;
+            _env = env;
+        }
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            using var scope = serviceProvider.CreateScope();
+            using var scope = _serviceProvider.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AssetManagerDbContext>();
 
-            // 1. Veritabanını oluştur/güncelle
-            // SADECE ilişkisel bir DB (SQL Server gibi) kullanılıyorsa migration yap
-            if (context.Database.IsRelational())
+            if (_env.IsDevelopment())
             {
+                // Local/Dev: otomatik migrate
                 await context.Database.MigrateAsync(cancellationToken);
             }
             else
             {
-                // InMemory veya Relational olmayan DB'lerde sadece şemayı oluştur
+                // Production: sadece DB yoksa oluştur
                 await context.Database.EnsureCreatedAsync(cancellationToken);
             }
+
+            // Seed veri (departments, users, assets) burada değişmez
+            await SeedDataAsync(context, cancellationToken);
+        }
+        private static async Task SeedDataAsync(AssetManagerDbContext context, CancellationToken cancellationToken)
+        {
 
             // 2. Departmanları Hazırla (Eksikse ekle, varsa çek)
             if (!await context.Departments.AnyAsync(cancellationToken))
@@ -50,12 +63,16 @@ namespace AssetManager.Infrastructure.Data
             // 3. Kullanıcıları Hazırla
             if (!await context.Users.AnyAsync(cancellationToken))
             {
+                var adminPassword = Environment.GetEnvironmentVariable("ADMIN_PASSWORD") ?? "admin123";
+                var editorPassword = Environment.GetEnvironmentVariable("EDITOR_PASSWORD") ?? "editor123";
+                var guestPassword = Environment.GetEnvironmentVariable("GUEST_PASSWORD") ?? "user123";
+
                 var admin = new AppUserEntity
                 {
                     Username = "admin",
                     FullName = "System Admin",
                     Email = "admin@enterprise.com",
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin123"),
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(adminPassword),
                     Role = Roles.Admin,
                     DepartmentId = itDept?.Id // Artık güvenle erişebiliriz
                 };
@@ -65,7 +82,7 @@ namespace AssetManager.Infrastructure.Data
                     Username = "jdoe",
                     FullName = "John Doe",
                     Email = "j.doe@enterprise.com",
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("editor123"),
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(editorPassword),
                     Role = Roles.Editor,
                     DepartmentId = hrDept?.Id
                 };
@@ -75,7 +92,7 @@ namespace AssetManager.Infrastructure.Data
                     Username = "awinehouse",
                     FullName = "Amy Winehouse",
                     Email = "amy.w@enterprise.com",
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("user123"),
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(guestPassword),
                     Role = Roles.Guest,
                     DepartmentId = salesDept?.Id
                 };

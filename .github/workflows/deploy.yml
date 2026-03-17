@@ -41,8 +41,8 @@ jobs:
         run: dotnet build AssetManager.slnx --configuration Release --no-restore
 
       # 5. Run tests
-      - name: Run Unit Tests
-        run: dotnet test tests/UnitTests/UnitTests.csproj --no-build --verbosity normal
+      - name: Run All Tests
+        run: dotnet test AssetManager.slnx --no-build --verbosity normal
 
       # 6. Package Docker images
       - name: Build Docker images

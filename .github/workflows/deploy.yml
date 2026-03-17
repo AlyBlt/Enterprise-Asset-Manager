@@ -41,8 +41,8 @@ jobs:
         run: dotnet build AssetManager.slnx --configuration Release --no-restore
 
       # 5. Run tests
-      - name: Run All Tests
-        run: dotnet test AssetManager.slnx --no-build --verbosity normal
+      - name: Run Tests
+        run: dotnet test AssetManager.slnx --configuration Release --verbosity normal
 
       # 6. Package Docker images
       - name: Build Docker images
@@ -54,7 +54,7 @@ jobs:
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_PASSWORD }}
+          key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
           script: |
             # Hedef klasöre git

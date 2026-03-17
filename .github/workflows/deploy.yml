@@ -64,11 +64,6 @@ jobs:
             # Kodu güncelle
             git pull origin main
 
-            # Docker Compose ile ayaða kaldýr
-            docker compose -f compose.yml pull
-            docker compose -f compose.yml up -d --remove-orphans
-
-            # Migration iþlemi (CI/CD sýrasýnda db migration)
-            docker exec -i assetmanager-api dotnet ef database update \
-              --startup-project /app/src/AssetManager.API \
-              --project /app/src/AssetManager.Infrastructure
+            # Container’larý ayaða kaldýr / update
+            docker-compose -f compose.yml pull
+            docker-compose -f compose.yml up -d --remove-orphans
